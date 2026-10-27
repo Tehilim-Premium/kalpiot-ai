@@ -1,0 +1,17 @@
+# קלפיות AI — Netlify: האתר הסטטי מתיקיית docs (נבנה מראש ב-scripts/build.mjs), ופונקציית "שאל את העיר".
+[build]
+  publish = "docs"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
