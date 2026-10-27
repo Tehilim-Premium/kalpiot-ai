@@ -7,3 +7,4 @@ qa/shots/
 .netlify
 .env
 data/raw-geo/countries-10m.json
+qa/video/
