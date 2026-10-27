@@ -43,7 +43,13 @@ async function run(device, theme) {
   await page.evaluate(() => window.KAI.sheet.close());
   await page.evaluate(() => window.KAI.reports.open('day')); await page.waitForTimeout(500); await snap('report-day');
   await page.evaluate(() => { window.KAI.reports.close(true); window.KAI.reports.open('cities'); }); await page.waitForTimeout(500); await snap('report-cities');
+  await page.evaluate(() => { window.KAI.reports.close(true); window.KAI.reports.open('duels'); }); await page.waitForTimeout(500); await snap('report-duels');
   await page.evaluate(() => window.KAI.reports.close(true));
+  // ticker must be visible and moving on every screen
+  const tk1 = await page.evaluate(() => ({ items: document.querySelectorAll('#tkTrack button').length, m: getComputedStyle(document.getElementById('tkTrack')).transform, vis: document.getElementById('ticker').getBoundingClientRect().height }));
+  await page.waitForTimeout(700);
+  const tk2 = await page.evaluate(() => getComputedStyle(document.getElementById('tkTrack')).transform);
+  if (!tk1.items || tk1.vis < 20 || tk1.m === tk2) errors.push(`${device}/${theme}: ticker not running (${tk1.items} items, height ${tk1.vis})`);
   // overflow check: body never scrolls sideways
   const ovf = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
   if (ovf) errors.push(`${device}/${theme}: horizontal overflow`);

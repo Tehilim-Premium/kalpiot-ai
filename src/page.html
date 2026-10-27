@@ -117,6 +117,23 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .chip svg{width:16px;height:16px;color:var(--mute);flex:none}
 .fsb{position:absolute;top:12px;inset-inline-end:max(12px,env(safe-area-inset-left,0px));z-index:3;width:44px;height:44px;border-radius:14px;background:var(--gold);color:#1a1200;display:grid;place-items:center;box-shadow:var(--d3)}
 .fsb svg{width:20px;height:20px}
+/* visible layout switch + colour legend on the city */
+.citybar{position:absolute;top:66px;inset-inline-start:max(12px,env(safe-area-inset-right,0px));z-index:3;display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--s1);border:1px solid var(--line);box-shadow:var(--d2)}
+.citybar button{height:34px;padding:0 12px;border-radius:10px;font-size:13px;font-weight:700;color:var(--mute);display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.citybar button svg{width:16px;height:16px}
+.citybar button[aria-pressed="true"]{background:var(--flag);color:#fff}
+.citybar #cityView{color:var(--ink2);border-inline-start:1px solid var(--line);border-radius:0 10px 10px 0;margin-inline-start:2px}
+.legend{position:absolute;inset-inline:max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2;display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.legend button{display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;border-radius:999px;background:var(--s1);border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--ink2);box-shadow:var(--d2);transition:all .2s}
+.legend button i{width:9px;height:9px;border-radius:3px;background:var(--c);box-shadow:0 0 6px var(--c)}
+.legend button b{font-weight:900;color:var(--ink)}
+.legend button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.legend button[aria-pressed="true"] b{color:var(--bg)}
+.legend button.dim{opacity:.5}
+.pick-card.on~.legend,.gest~.legend{display:none}
+@media (max-width:899px){.citybar{top:66px}.citybar button{padding:0 9px;font-size:12px}.legend button{font-size:11px;padding:4px 8px 4px 7px}}
+@media (min-width:900px){.citybar{top:72px;inset-inline-start:16px}.legend{inset-inline:auto 16px;justify-content:flex-start;max-width:60%}}
+.stage.full .citybar{top:calc(72px + env(safe-area-inset-top,0px))}
 .stage.full{position:fixed!important;inset:0!important;z-index:40;display:block}
 .stage.full .fsb{top:calc(12px + env(safe-area-inset-top,0px))}
 .stage.full .chip{top:calc(12px + env(safe-area-inset-top,0px))}
@@ -309,13 +326,14 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .tk-pause svg{width:14px;height:14px}
 .tk-pause[aria-pressed="true"]{background:var(--gold);color:#1a1200}
 .tk-viewport{flex:1;min-width:0;overflow:hidden;position:relative}
-.tk-track{position:absolute;top:0;height:100%;display:flex;align-items:center;gap:0;white-space:nowrap;will-change:transform;animation:kai-tk var(--dur,40s) linear infinite}
-.ticker.paused .tk-track,.tk-viewport:hover .tk-track{animation-play-state:paused}
-.tk-track button{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;font-size:13px;font-weight:500;color:#fff;white-space:nowrap;border-inline-end:1px solid rgba(255,255,255,.14)}
+.tk-track{position:absolute;top:0;inset-inline-start:0;height:100%;display:flex;align-items:center;gap:0;white-space:nowrap;will-change:transform;animation:kai-tk var(--dur,60s) linear infinite}
+.ticker.paused .tk-track,.ticker.hold .tk-track{animation-play-state:paused}
+.tk-track button{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;font-size:13.5px;font-weight:500;color:#fff;white-space:nowrap;border-inline-end:1px solid rgba(255,255,255,.14)}
+.tk-track button em{font-style:normal;font-size:11px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.14);color:var(--gold-soft);font-weight:700}
 .tk-track button b{color:var(--gold-soft);font-weight:900}
 .tk-track button i{width:6px;height:6px;border-radius:50%;background:var(--c,var(--gold));flex:none}
 .tk-track button:hover{background:rgba(255,255,255,.08)}
-@keyframes kai-tk{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@keyframes kai-tk{from{transform:translateX(0)}to{transform:translateX(50%)}}
 @media (prefers-reduced-motion:reduce){.tk-track{animation:none;position:static;overflow:auto}}
 @media (min-width:900px){.ticker{order:2;height:36px;border-top:1px solid var(--line)}}
 /* leaders for displaced labels */
@@ -366,6 +384,22 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 @media (min-width:900px){.top .ib span{display:inline}.fsb{width:auto;padding:0 14px;gap:8px;font-weight:700;font-size:13px}.fsb span{display:inline}}
 .fsb span{display:none}
 .fsb{display:flex;align-items:center;justify-content:center}
+
+/* ===== duels ===== */
+.duels{display:grid;gap:10px}
+.duel{display:grid;gap:8px;padding:12px 12px 10px;border-radius:14px;background:var(--bg);border:1px solid var(--line);text-align:start;width:100%;transition:border-color .2s}
+.duel:hover{border-color:var(--line-strong)}
+.duel .dt{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:15px;font-weight:700}
+.duel .dt small{font-size:12px;font-weight:600;color:var(--gold)}
+.duel .ds{display:grid;grid-template-columns:minmax(96px,1.1fr) 2fr auto;gap:8px;align-items:center}
+.duel .dn{font-size:13px;font-weight:700;line-height:1.2;color:var(--c)}
+.duel .dn small{display:block;font-size:10.5px;font-weight:400;color:var(--mute)}
+.duel .db{position:relative;height:12px;border-radius:6px;background:var(--s2);overflow:visible}
+.duel .db i{position:absolute;inset:0 0 0 auto;width:var(--w);border-radius:6px;background:var(--c)}
+.duel .db em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);inset-inline-start:var(--n);opacity:.7}
+.duel .dv{font-size:18px;font-weight:900;text-align:end;line-height:1;min-width:58px}
+.duel .dv small{display:block;font-size:10px;font-weight:500;color:var(--mute);margin-top:2px}
+.duel .dv .up{color:var(--up)}.duel .dv .down{color:var(--down)}
 
 /* ===== reports ===== */
 .repgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -491,6 +525,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
         <div class="shead"><h2 id="homeTitle">ארצי</h2><button class="ibtn" data-info="home" aria-label="מה מאומת ומה הערכה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></button></div>
         <div class="hero" id="hero"></div>
         <div class="timeline" id="timeline"></div>
+        <div class="card"><h3>מי מול מי <span class="small">לחיצה פותחת דוח</span></h3><div id="duelsHome"></div></div>
         <div class="card"><h3>דוחות בלחיצה <span class="small">מהנתונים שבדף</span></h3><div class="repgrid" id="repGrid"></div></div>
         <div class="card"><h3>לפי פרופיל הצבעה <span class="small">מהתוצאה ביישוב ב-2022</span></h3><div class="prof" id="profRows"></div></div>
       </section>
@@ -531,6 +566,8 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
     <div class="tipx" id="tipx"></div>
     <button class="chip" id="chip" aria-label="סינון העיר"></button>
     <button class="fsb" id="btnFull" aria-label="מסך מלא" title="מסך מלא: גרירה, הטיה וצביטה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>מסך מלא</span></button>
+    <div class="citybar" id="citybar" role="group" aria-label="פריסת העיר"><button data-l="map" aria-pressed="true">מפת ישראל</button><button data-l="ring" aria-pressed="false">מעגל לפי פרופיל</button><button id="cityView" aria-label="הגדרות תצוגה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h6"/></svg>תצוגה</button></div>
+    <div class="legend" id="legend" aria-label="מקרא צבעים"></div>
     <div class="pick-card" id="pick"></div>
   </section>
 </main>
@@ -624,6 +661,7 @@ const sheet={open(html){$('sheet').innerHTML='<div class="grip"></div>'+html;$('
     const T={home:`<h2>מה מאומת ומה הערכה</h2>
       <p><span class="vt v">מאומת</span>אחוזי ההצבעה הארציים ולפי יישוב, נכון לשעה ${esc(s.time)}: ועדת הבחירות המרכזית. בעלי זכות הבחירה ותוצאות 2022 לכל יישוב: הקובץ הרשמי של הכנסת ה-25.</p>
       <p><span class="vt e">הערכה</span>בוחרים 2026 ביישוב = בעלי זכות 2022 × ${SCALE}. "הצביעו" ביישוב = בוחרים × אחוז. ${r.exact?'':'2022 באותה שעה: חישוב ליניארי בין '+hhmm(r.a[0])+' ('+f1(r.a[1])+'%) ל-'+(r.b?hhmm(r.b[0])+' ('+f1(r.b[1])+'%)':'')+'. '}הפרופיל של יישוב נקבע מחלוקת הקולות שלו ב-2022: ערבי = רוב למפלגות הערביות; חרדי = ג+שס מעל 45%; דתי-לאומי = ט מעל 35%; ימין = גוש הקואליציה מעל 55%; שמאל = אמת+מרצ מעל 30%; מרכז-שמאל = גוש האופוזיציה מעל 50%.</p>
+      <p>הדף מתרענן מעצמו כל 15 דקות עד 01:00 כדי לקלוט נקודות זמן חדשות שפורסמו.</p>
       <p>${fmt(ex.votes)} מצביעים מוסברים ביישובים מתוך ${fmt(s.voters)} הארציים. ההפרש (${fmt(Math.max(0,s.voters-ex.votes))}) הוא "אחר": מעטפות כפולות, יישובים ללא נתוני 2022 וטעות ההערכה.</p>`,
       list:`<h2>רשימת היישובים</h2><p>כל יישוב שוועדת הבחירות פרסמה עבורו אחוז הצבעה בשעה ${esc(s.time)}. המספר הגדול = אחוז ההצבעה ביישוב. השינוי = מאז נקודת הזמן הקודמת. סינון לפי פרופיל, חיפוש לפי שם, ולחיצה פותחת כרטיס יישוב.</p><p><span class="vt e">הערכה</span>סיווג מגזר וסוג יישוב ל-${Object.values(CLS).filter(c=>c.est).length} יישובים נקבע לפי כללים (גודל, שם, תוצאה 2022) ולא נבדק ידנית.</p>`,
       groups:`<h2>איך לקרוא את הפסים</h2><p>אורך הפס = כמה מהבוחרים בקבוצה כבר הצביעו. הקו הכהה = האחוז הארצי עכשיו. קו הזהב = התוצאה הסופית של אותה קבוצה ב-2022. המספר הקטן = איזה חלק מכלל הבוחרים הקבוצה מהווה.</p><p>הפס המחולק למטה: כל קבוצה תורמת נקודות לאחוז הארצי לפי המצביעים שלה. הקטע המקווקו "אחר" = מצביעים שאינם מוסברים ביישובים.</p>`,
@@ -660,7 +698,7 @@ const render={
       ${snaps.length>1?`<div class="curve">${reports.chart([{name:'2022',v:snaps.map(x=>ref2022(x.time).v),cls:'ref'},{name:'היום',v:snaps.map(x=>x.pct),cls:'nat'}],snaps.map(x=>x.time),{h:150,label:'מהלך היום מול 2022'})}</div>`:''}`;
     $('timeline').innerHTML=snaps.map((x,i)=>`<button aria-pressed="${i===cur}" data-i="${i}"><b>${f1(x.pct)}%</b><span>${esc(x.time)}</span></button>`).join('')+`<button class="add" id="addSnap" aria-label="הוספת נקודת זמן">+</button>`;
     $('timeline').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>show(+b.dataset.i));$('addSnap').onclick=()=>sheet.update();
-    this.prof();reports.grid()},
+    this.prof();reports.grid();$('duelsHome').innerHTML=duels.card();duels.bind($('duelsHome'))},
   prof(){const G=groups('profile');const nat=snaps[cur].pct;const max=Math.max(70,...G.map(g=>g.wt))+4;
     $('profRows').innerHTML=G.map(g=>`<button class="prow ${filter.k==='profile'&&filter.v===g.name?'on':filter.k?'dim':''}" data-v="${esc(g.name)}" style="--c:${colorOf('profile',g.name)};--w:${g.wt/max*100}%;--n:${nat/max*100}%"><i></i><span class="t"><b>${esc(g.name)}</b><small>${f1(g.share)}% מהבוחרים · ${g.n} יישובים</small><span class="bar"><i></i><em></em></span></span><span class="v"><b>${f1(g.wt)}%</b><small>הצביעו</small></span></button>`).join('');
     $('profRows').querySelectorAll('.prow').forEach(b=>b.onclick=()=>setFilter('profile',b.dataset.v,true))},
@@ -683,10 +721,14 @@ const render={
     $('stack').innerHTML=arr.map(g=>`<i style="--c:${colorOf(k,g.name)};--w:${100*g.votes/tot}%" title="${esc(g.name)}"></i>`).join('')+`<i class="other" style="--w:${100*other/tot}%" title="אחר"></i>`;
     $('stackKeys').innerHTML=arr.map(g=>`<span><i style="--c:${colorOf(k,g.name)}"></i>${esc(g.name)} ${f1(100*g.votes/s.eligible)} נק׳</span>`).join('')+`<span><i class="other"></i>אחר ${f1(100*other/s.eligible)} נק׳</span><span>סה"כ ${f1(s.pct)}%</span>`},
   chip(){const s=snaps[cur];const c=filter.k?colorOf(filter.k,filter.v):'var(--flag)';const G=filter.k?groups(filter.k).find(g=>g.name===filter.v):null;
+    $('citybar').querySelectorAll('[data-l]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===city.layoutMode));
+    const P=groups('profile');$('legend').innerHTML=P.map(g=>`<button data-v="${esc(g.name)}" aria-pressed="${filter.k==='profile'&&filter.v===g.name}" class="${filter.k&&!(filter.k==='profile'&&filter.v===g.name)?'dim':''}" style="--c:${colorOf('profile',g.name)}" title="${esc(g.name)}: ${g.n} יישובים · ${f1(g.share)}% מהבוחרים"><i></i>${esc(g.name)} <b>${f1(g.wt)}%</b></button>`).join('');
+    $('legend').querySelectorAll('button').forEach(b=>b.onclick=()=>setFilter('profile',b.dataset.v));
     $('chip').style.setProperty('--c',c);$('chip').innerHTML=`<i class="dot"></i><span class="n">${f1(G?G.wt:s.pct)}<small>%</small></span><span class="l"><b>${filter.k?esc(filter.v):'כל היישובים'}</b><span>הצביעו · ${esc(s.time)}</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>`}
 };
 $('q').oninput=()=>{render.shown=0;render.list()};$('sort').onchange=()=>render.list();
-$('chip').onclick=()=>sheet.filterPick();
+$('chip').onclick=()=>sheet.filterPick();$('cityView').onclick=()=>sheet.filterPick();
+$('citybar').querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{city.setLayout(b.dataset.l);render.chip()});
 
 /* ===== locality layer ===== */
 const loc={name:null,
@@ -794,6 +836,8 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,ra
   density:(()=>{try{return +localStorage.getItem('kai-density')||2}catch(_){return 2}})(),
   setLayout(m){if(m===this.layoutMode)return;this.layoutMode=m;try{localStorage.setItem('kai-layout',m)}catch(_){}this.layoutKey='';this.userZoomed=false;this.ttx=m==='map'?MAP.cx:0;this.ttz=m==='map'?MAP.cz:0;this.taz=m==='map'?Math.PI/2:.7;this.tpol=m==='map'?.8:1.0;this.resize();this.build();toast(m==='map'?'מפת ארץ ישראל':'מעגל לפי פרופיל')},
   setDensity(d){this.density=d;try{localStorage.setItem('kai-density',d)}catch(_){}this.towerLabels()},
+  bounds(){return this.layoutMode==='map'?{x0:MAP.cx-MAP.LW/2,x1:MAP.cx+MAP.LW/2,z0:MAP.cz-MAP.LH/2,z1:MAP.cz+MAP.LH/2}:{x0:-20,x1:20,z0:-20,z1:20}},
+  minRad(){return 6},maxRad(){return this.layoutMode==='map'?120:110},
   hideHint(){if(!this.hint||!this.hint.parentNode)return;this.hint.classList.add('off');setTimeout(()=>this.hint.remove(),400);try{localStorage.setItem('kai-gest','1')}catch(_){}},
   mapTexture(){const dark=theme.isDark();const c=document.createElement('canvas');const PX=6;c.width=Math.round(MAP.W*PX);c.height=Math.round(MAP.Hh*PX);const x=c.getContext('2d');
     const X=km=>(MAP.toX(km)-MAP.cx)*PX+c.width/2,Y=km=>(MAP.toZ(km)-MAP.cz)*PX+c.height/2;
@@ -896,15 +940,15 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,ra
       if(pts.size===1){down=true;moved=false;sx=lx=e.clientX;sy=ly=e.clientY;saz=this.taz;spol=this.tpol;lt=performance.now();cv.classList.add('grab')}
       else if(pts.size===2){const a=[...pts.values()];pinch0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);rad0=this.trad;pan0=[(a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2,this.ttx,this.ttz]}});
     cv.addEventListener('pointermove',e=>{this.mx=e.clientX;this.my=e.clientY;this.mouseMoved=true;if(pts.has(e.pointerId))pts.set(e.pointerId,[e.clientX,e.clientY]);
-      if(pts.size===2){const a=[...pts.values()];const d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);this.trad=clamp(rad0*Math.pow(pinch0/d,.85),6,120);this.userZoomed=true;
-        const cx=(a[0][0]+a[1][0])/2,cy=(a[0][1]+a[1][1])/2;const k=this.trad*.0016;const dx=(cx-pan0[0])*k,dy=(cy-pan0[1])*k;const ca=Math.cos(this.az),sa=Math.sin(this.az);this.ttx=clamp(pan0[2]+(-dx*sa+dy*ca)*-1,-20,20);this.ttz=clamp(pan0[3]+(dx*ca+dy*sa)*-1,-20,20);moved=true;user();return}
-      if(!down)return;const now=performance.now();const dt=Math.max(1,now-lt);this.vel=(e.clientX-lx)/dt*-.11;this.velP=(e.clientY-ly)/dt*.1;lx=e.clientX;ly=e.clientY;lt=now;
-      const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>4)moved=true;this.taz=saz-dx*.0065;this.tpol=clamp(spol+dy*.006,.2,1.5);if(moved)user()});
-    const up=e=>{pts.delete(e.pointerId);if(pts.size<2){pinch0=0;pan0=null}if(pts.size===0){down=false;cv.classList.remove('grab');if(!moved){const now=performance.now();if(now-lastTap<320){this.reset();lastTap=0}else{lastTap=now;this.pick(e.clientX,e.clientY,true)}}else if(performance.now()-lt>80){this.vel=0;this.velP=0}}};
+      if(pts.size===2){const a=[...pts.values()];const d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);this.trad=clamp(rad0*Math.pow(pinch0/d,.8),this.minRad(),this.maxRad());this.userZoomed=true;
+        const cx=(a[0][0]+a[1][0])/2,cy=(a[0][1]+a[1][1])/2;const k=this.trad*.0012;const dx=(cx-pan0[0])*k,dy=(cy-pan0[1])*k;const ca=Math.cos(this.az),sa=Math.sin(this.az);const B=this.bounds();this.ttx=clamp(pan0[2]+(-dx*sa+dy*ca)*-1,B.x0,B.x1);this.ttz=clamp(pan0[3]+(dx*ca+dy*sa)*-1,B.z0,B.z1);moved=true;user();return}
+      if(!down)return;const now=performance.now();const dt=Math.max(1,now-lt);this.vel=clamp((e.clientX-lx)/dt*-.06,-.05,.05);this.velP=0;lx=e.clientX;ly=e.clientY;lt=now;
+      const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>4)moved=true;this.taz=saz-dx*.0045;this.tpol=clamp(spol+dy*.0045,.25,1.45);if(moved)user()});
+    const up=e=>{pts.delete(e.pointerId);if(pts.size<2){pinch0=0;pan0=null}if(pts.size===0){down=false;cv.classList.remove('grab');if(!moved){const now=performance.now();if(now-lastTap<320){this.reset();lastTap=0}else{lastTap=now;this.pick(e.clientX,e.clientY,true)}}else if(performance.now()-lt>60){this.vel=0;this.velP=0}}};
     cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('pointerleave',()=>{this.hover=-1;$('tipx').classList.remove('on');cv.classList.remove('pick')});
-    cv.addEventListener('wheel',e=>{e.preventDefault();this.trad=clamp(this.trad*(1+Math.sign(e.deltaY)*.07),6,120);this.userZoomed=true;user()},{passive:false});
+    cv.addEventListener('wheel',e=>{e.preventDefault();this.trad=clamp(this.trad*(1+Math.sign(e.deltaY)*.07),this.minRad(),this.maxRad());this.userZoomed=true;user()},{passive:false});
     $('btnFull').onclick=()=>this.full(!$('stage').classList.contains('full'));
-    addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;const m={ArrowLeft:()=>this.taz-=.12,ArrowRight:()=>this.taz+=.12,ArrowUp:()=>this.tpol=clamp(this.tpol-.08,.2,1.5),ArrowDown:()=>this.tpol=clamp(this.tpol+.08,.2,1.5),'+':()=>this.trad=clamp(this.trad*.88,6,120),'-':()=>this.trad=clamp(this.trad*1.12,6,120)}[e.key];if(m){m();this.userZoomed=true;user()}})},
+    addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;const m={ArrowLeft:()=>this.taz-=.12,ArrowRight:()=>this.taz+=.12,ArrowUp:()=>this.tpol=clamp(this.tpol-.08,.25,1.45),ArrowDown:()=>this.tpol=clamp(this.tpol+.08,.25,1.45),'+':()=>this.trad=clamp(this.trad*.88,this.minRad(),this.maxRad()),'-':()=>this.trad=clamp(this.trad*1.12,this.minRad(),this.maxRad())}[e.key];if(m){m();this.userZoomed=true;user()}})},
   full(on,fromPop){const st=$('stage');if(on===st.classList.contains('full'))return;if(!on&&!fromPop&&nav.top()==='full'){history.back();return}setTimeout(()=>this.towerLabels(),500);
     st.classList.toggle('full',on);$('btnFull').innerHTML=on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>יציאה</span>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>מסך מלא</span>';$('btnFull').setAttribute('aria-label',on?'יציאה ממסך מלא':'מסך מלא');
     if(on){nav.push('full');this.lastUser=performance.now()}this.userZoomed=false;setTimeout(()=>this.resize(),60);setTimeout(()=>this.resize(),400)},
@@ -932,8 +976,9 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,ra
       /* camera: short cinematic intro, then the user's hand, momentum, and a slow idle orbit */
       const introP=clamp((now-this.introT0+200)/2400,0,1);
       if(introP<1&&!this.userZoomed&&this.lastUser===0){const e=1-Math.pow(1-introP,3);this.rad=lerp(105,this.trad,e);this.pol=lerp(.4,this.tpol,e);this.az=lerp(this.taz-1.2,this.taz,e)}
-      else{if(!down&&(this.vel||this.velP)){this.taz+=this.vel*dt;this.tpol=clamp(this.tpol+this.velP*dt,.2,1.5);this.vel*=Math.pow(.92,dt);this.velP*=Math.pow(.9,dt);if(Math.abs(this.vel)<.0002)this.vel=0;if(Math.abs(this.velP)<.0002)this.velP=0}
-        if(!down&&now-this.lastUser>7000&&this.sel<0)this.taz+=.0009*dt;
+      else{if(!down&&this.vel){this.taz+=this.vel*dt;this.vel*=Math.pow(.86,dt);if(Math.abs(this.vel)<.0003)this.vel=0}
+        if(!down&&now-this.lastUser>9000&&this.sel<0&&this.layoutMode!=='map')this.taz+=.0007*dt;
+        {const B=this.bounds();this.ttx=clamp(this.ttx,B.x0,B.x1);this.ttz=clamp(this.ttz,B.z0,B.z1);this.trad=clamp(this.trad,this.minRad(),this.maxRad());this.tpol=clamp(this.tpol,.25,1.45)}
         const k=K(down?.35:.1,dt);this.az+=(this.taz-this.az)*k;this.pol+=(this.tpol-this.pol)*k;this.rad+=(this.trad-this.rad)*K(.1,dt)}
       const k2=K(.08,dt);this.tx+=(this.ttx-this.tx)*k2;this.ty+=(this.tty-this.ty)*k2;this.tz+=(this.ttz-this.tz)*k2;
       this.cam.position.set(this.tx+this.rad*Math.sin(this.pol)*Math.cos(this.az),this.ty+this.rad*Math.cos(this.pol),this.tz+this.rad*Math.sin(this.pol)*Math.sin(this.az));this.cam.lookAt(this.tx,this.ty,this.tz);
@@ -949,9 +994,24 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,ra
       if(this.mouseMoved&&!isMobile()&&!down){this.mouseMoved=false;this.pick(this.mx,this.my,false)}
     }catch(err){if(!this._err){this._err=1;console.warn('city',err)}}};tick()}};
 
+/* ===== duels: right vs left, Arabs vs Jews, haredim, settlers, Bedouin, kibbutz vs moshav ===== */
+const duels={
+  defs:[
+    {id:'blocs',title:'ימין מול מרכז-שמאל',a:{name:'ימין רחב',f:r=>['ימין','דתי-לאומי','חרדי'].includes(r.profile),c:'var(--p-right)'},b:{name:'מרכז-שמאל רחב',f:r=>['מרכז-שמאל','שמאל'].includes(r.profile),c:'var(--p-center)'},note:'לפי פרופיל ההצבעה של היישוב ב-2022: ימין רחב = ימין + דתי-לאומי + חרדי; מרכז-שמאל רחב = מרכז-שמאל + שמאל'},
+    {id:'jewsarabs',title:'יהודים מול ערבים',a:{name:'יישובים יהודיים',f:r=>r.sector==='יהודי',c:'var(--p-right)'},b:{name:'יישובים ערביים',f:r=>r.sector==='ערבי'||r.sector==='בדואי (נגב)',c:'var(--p-arab)'},note:'ערים מעורבות ודרוזים לא נספרים כאן (מופיעים במגזר)'},
+    {id:'haredi',title:'חרדים מול שאר היהודים',a:{name:'חרדים',f:r=>r.profile==='חרדי',c:'var(--p-haredi)'},b:{name:'יהודים לא חרדים',f:r=>r.sector==='יהודי'&&r.profile!=='חרדי',c:'var(--p-right)'},note:'חרדי = יישוב שבו ג+שס קיבלו מעל 45% ב-2022'},
+    {id:'settlers',title:'מתנחלים מול כל השאר',a:{name:'יו"ש',f:r=>r.type==='יו"ש',c:'var(--p-rz)'},b:{name:'בתוך הקו הירוק',f:r=>r.type!=='יו"ש',c:'var(--p-center)'},note:'לפי סוג היישוב'},
+    {id:'bedouin',title:'בדואים מול שאר הערבים',a:{name:'בדואים בנגב',f:r=>r.sector==='בדואי (נגב)',c:'var(--p-haredi)'},b:{name:'ערבים (צפון ומרכז)',f:r=>r.sector==='ערבי',c:'var(--p-arab)'},note:''},
+    {id:'rural',title:'קיבוצים מול מושבים מול ערים',a:{name:'קיבוצים',f:r=>r.type==='קיבוץ',c:'var(--p-left)'},b:{name:'מושבים',f:r=>r.type==='מושב / קהילתי',c:'var(--p-center)'},c3:{name:'ערים',f:r=>r.type==='עיר',c:'var(--p-right)'},note:''}],
+  side(def,i){const rs=(i==null?rows:reports.localRowsFull(i)).filter(r=>r.pct>=3&&r.elig>0&&def.f(r));const e=rs.reduce((a,r)=>a+r.elig,0),v=rs.reduce((a,r)=>a+r.elig*r.pct/100,0);const tot=(i==null?rows:reports.localRowsFull(i)).filter(r=>r.pct>=3).reduce((a,r)=>a+r.elig,0);return{name:def.name,c:def.c,n:rs.length,wt:e?100*v/e:0,share:tot?100*e/tot:0,votes:v}},
+  list(){const nat=snaps[cur].pct;return this.defs.map(d=>{const a=this.side(d.a),b=this.side(d.b),c=d.c3?this.side(d.c3):null;const pa=cur>0?this.side(d.a,cur-1):null,pb=cur>0?this.side(d.b,cur-1):null;const lead=a.wt>=b.wt?a:b,trail=a.wt>=b.wt?b:a;const gap=Math.abs(a.wt-b.wt);
+    const verdict=gap<1?'כמעט שווים':`${lead.name} מובילים ב-${f1(gap)} נק׳`;return{...d,a,b,c,pa,pb,lead,trail,gap,verdict,nat}})},
+  card(){const L=this.list();return `<div class="duels">${L.map(d=>{const sides=[d.a,d.b].concat(d.c?[d.c]:[]);const max=Math.max(80,...sides.map(x=>x.wt))+2;return `<button class="duel" data-d="${d.id}"><span class="dt">${esc(d.title)}<small>${esc(d.verdict)}</small></span>${sides.map((x,i)=>{const prev=i===0?d.pa:i===1?d.pb:null;return `<span class="ds" style="--c:${x.c}"><span class="dn">${esc(x.name)}<small>${f1(x.share)}% מהבוחרים · ${x.n} יישובים</small></span><span class="db"><i style="--w:${x.wt/max*100}%"></i><em style="--n:${d.nat/max*100}%"></em></span><span class="dv">${f1(x.wt)}%<small>הצביעו${prev?' · <b class="'+(x.wt-prev.wt>=0?'up':'down')+'">'+signed(x.wt-prev.wt)+'</b>':''}</small></span></span>`}).join('')}</button>`}).join('')}</div>`},
+  bind(el){el.querySelectorAll('.duel').forEach(b=>b.onclick=()=>reports.open('duels',b.dataset.d))}};
+
 /* ===== reports: one click, built from the numbers in the page ===== */
 const reports={id:null,arg:null,txt:'',
-  list:[['day','סיכום היום','ארצי, מול 2022, מי מוביל ומי מפגר'],['profile','לפי פרופיל הצבעה','ששת הפרופילים לאורך היום'],['sector','לפי מגזר','יהודי, ערבי, מעורב, בדואי, דרוזי'],['lean','לפי גוש 2022','קואליציה, אופוזיציה, ערבי, מעורב'],['cities','הערים הגדולות','כל עיר מעל 50 אלף בוחרים'],['edges','קצוות ומגמות','הגבוהים, הנמוכים והמזנקים']],
+  list:[['duels','מי מול מי','ימין/שמאל, יהודים/ערבים, חרדים, מתנחלים, בדואים'],['day','סיכום היום','ארצי, מול 2022, מי מוביל ומי מפגר'],['profile','לפי פרופיל הצבעה','ששת הפרופילים לאורך היום'],['sector','לפי מגזר','יהודי, ערבי, מעורב, בדואי, דרוזי'],['lean','לפי גוש 2022','קואליציה, אופוזיציה, ערבי, מעורב'],['cities','הערים הגדולות','כל עיר מעל 50 אלף בוחרים'],['edges','קצוות ומגמות','הגבוהים, הנמוכים והמזנקים']],
   grid(){$('repGrid').innerHTML=this.list.map(([id,t,s])=>`<button data-r="${id}"><b>${t}</b><small>${s}</small></button>`).join('');$('repGrid').querySelectorAll('button').forEach(b=>b.onclick=()=>this.open(b.dataset.r))},
   sgn:(n,d=1)=>(n>=0?'+':'−')+f1(Math.abs(n)),
   dcls:n=>n>=0?'up':'down',
@@ -971,12 +1031,13 @@ const reports={id:null,arg:null,txt:'',
   ins(list){return`<div class="ins">${list.map(x=>`<div style="--c:${x.c||'var(--flag)'}"><b class="k">${x.k}<small>${esc(x.s||'')}</small></b><span>${x.t}</span></div>`).join('')}</div>`},
   insTxt(list){return list.map(x=>`• ${x.k} ${x.s||''}: ${x.t.replace(/<[^>]+>/g,'')}`).join('\n')},
   localRows(i){const s=snaps[i];return s.rows.map(r=>{const c=CLS[r[1]];return c?{name:r[1],pct:r[2],elig:c.b?Math.round(c.b*SCALE):0,p:c.p||'ללא נתון',s:c.s,t22:c.v}:null}).filter(Boolean)},
+  localRowsFull(i){const s=snaps[i];return s.rows.map(r=>{const c=CLS[r[1]];return c?{name:r[1],pct:r[2],elig:c.b?Math.round(c.b*SCALE):0,profile:c.p||'ללא נתון',sector:c.s,type:c.t,t22:c.v}:null}).filter(Boolean)},
   open(id,arg){const r=this.build(id,arg);if(!r)return;if(!this.id)nav.push('rep');this.id=id;this.arg=arg;const s=snaps[snaps.length-1];
     $('rep').innerHTML=`<div class="lnav"><button class="back" id="repBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>חזרה</button><span class="sp"></span><button class="ibtn" data-info="rep" aria-label="מה מאומת ומה הערכה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></button></div>
       <div class="rep-h"><h2>${esc(r.title)}</h2><span class="small">נכון ל-${esc(s.time)} · ${snaps.map(x=>x.time).join(' ← ')} · ${fmt(s.voters)} הצביעו</span></div>${r.html}
       <div class="btns"><button class="btn" id="repCopy">העתק כטקסט</button><button class="btn q" id="repShare">שתף</button><button class="btn q" id="repAsk">שאל על הדוח</button>${window.claude?'':'<button class="btn q" id="repPrint">הדפס / PDF</button>'}</div>`;
     this.txt=`קלפיות AI — ${r.title} (נכון ל-${s.time}, ${snaps.map(x=>x.time).join(' ← ')})\n${r.txt}\n\nמאומת: אחוזי הצבעה (ועדת הבחירות), 2022 (קובץ רשמי). הערכה: בוחרים = 2022 × ${SCALE}, סיווג פרופיל/מגזר, 2022 באותה שעה.`;
-    $('rep').classList.add('on');$('rep').scrollTop=0;$('repBack').onclick=()=>this.close();$('rep').querySelector('[data-info]').onclick=()=>sheet.info('home');
+    $('rep').classList.add('on');$('rep').scrollTop=0;duels.bind($('rep'));$('repBack').onclick=()=>this.close();$('rep').querySelector('[data-info]').onclick=()=>sheet.info('home');
     $('repCopy').onclick=async()=>{try{await navigator.clipboard.writeText(this.txt);toast('הדוח הועתק כטקסט')}catch(_){toast('לא ניתן להעתיק כאן')}};
     $('repShare').onclick=()=>share(this.txt.slice(0,900));
     $('repAsk').onclick=()=>{this.close();nav.tab('ask');ask.send(`נתח את הדוח "${r.title}" ב-4 משפטים: מה הכי בולט ומה מפתיע?`)};
@@ -996,6 +1057,11 @@ const reports={id:null,arg:null,txt:'',
   changes(key,order){if(snaps.length<2)return{html:'',txt:''};const last=snaps.length-1;const G=groupsAt(last,key).groups,P=groupsAt(last-1,key).groups;const names=(order||Object.keys(G)).filter(n=>G[n]&&P[n]).map(n=>({n,d:G[n].wt-P[n].wt})).sort((a,b)=>b.d-a.d);const mx=Math.max(...names.map(x=>x.d),.1);
     return{html:`<div class="chg">${names.map(x=>`<div><span>${esc(x.n)}</span><span class="t"><i style="--c:${colorOf(key,x.n)};--w:${clamp(100*x.d/mx,0,100)}%"></i></span><b class="${this.dcls(x.d)}">${this.sgn(x.d)} נק׳</b></div>`).join('')}</div>`,txt:names.map(x=>`${x.n} ${this.sgn(x.d)}`).join(', ')}},
   build(id,arg){const L=snaps.length,last=L-1,s=snaps[last],p=snaps[last-1];const rf=ref2022(s.time);
+    if(id==='duels'){const L=duels.list();const focus=arg?L.find(d=>d.id===arg):null;const ordered=focus?[focus,...L.filter(d=>d!==focus)]:L;
+      const lede=ordered.slice(0,3).map(d=>`<b>${esc(d.title)}</b>: ${esc(d.verdict)} (${f1(d.a.wt)}% מול ${f1(d.b.wt)}%).`).join(' ');
+      const series=d=>{const sides=[['a',d.a],['b',d.b]].concat(d.c?[['c3',d.c]]:[]);return sides.map(([k,x])=>({name:x.name,c:(getComputedStyle(document.documentElement).getPropertyValue(x.c.replace(/var\(|\)/g,'')).trim()||'#888'),v:snaps.map((_,i)=>duels.side(duels.defs.find(x=>x.id===d.id)[k],i).wt)})).concat([{name:'ארצי',v:snaps.map(x=>x.pct),cls:'nat'}])};
+      const ins=ordered.map(d=>({k:f1(d.gap)+' נק׳',s:'פער',c:d.lead.c,t:`<b>${esc(d.title)}</b>: ${esc(d.lead.name)} ${f1(d.lead.wt)}% מול ${esc(d.trail.name)} ${f1(d.trail.wt)}%${d.pa&&d.pb?`; מאז ${esc(p.time)}: ${signed(d.a.wt-d.pa.wt)} מול ${signed(d.b.wt-d.pb.wt)}`:''}. ${d.note?esc(d.note)+'.':''}`}));
+      return{title:'מי מול מי',html:`<p class="lede">${lede}</p>`+duels.card()+ordered.map(d=>`<div class="card"><h3>${esc(d.title)} <span class="small">לאורך היום</span></h3>${this.chart(series(d),snaps.map(x=>x.time),{h:220,label:d.title+' לאורך היום'})}</div>`).join('')+`<div class="card"><h3>בשורה אחת</h3>${this.ins(ins)}</div>`,txt:`${lede.replace(/<[^>]+>/g,'')}\n${this.insTxt(ins)}`}}
     const natSeries={name:'ארצי',v:snaps.map(x=>x.pct),cls:'nat'};const refSeries={name:'2022',v:snaps.map(x=>ref2022(x.time).v),cls:'ref'};const times=snaps.map(x=>x.time);
     if(id==='day'){const P=this.groupTable('profile',[...PROFILES]);const top=[...PROFILES].map(n=>P.G[last][n]).filter(Boolean).sort((a,b)=>b.wt-a.wt);const big=this.localRows(last).filter(r=>r.elig>=50000);const bh=[...big].sort((a,b)=>b.pct-a.pct)[0];
       const lede=`נכון ל-<b>${esc(s.time)}</b> הצביעו <b>${f1(s.pct)}%</b> מהבוחרים, ${s.pct>=rf.v?'<b>'+this.sgn(s.pct-rf.v)+'</b> נק׳ מעל':'<b>'+f1(Math.abs(s.pct-rf.v))+'</b> נק׳ מתחת ל'}-2022 באותה שעה. ${top[0]?`<b>${esc(top[0].name)}</b> מובילים (${f1(top[0].wt)}%) ו<b>${esc(top[top.length-1].name)}</b> מפגרים (${f1(top[top.length-1].wt)}%).`:''} ${bh?`בין הערים הגדולות מובילה <b>${esc(bh.name)}</b> (${f1(bh.pct)}%).`:''}`;
@@ -1030,10 +1096,11 @@ function draggable(el,key){let sx,sy,ox,oy,moved;const saved=(()=>{try{return JS
 
 /* ===== ticker: news flashes that change with the screen ===== */
 const ticker={paused:false,
-  init(){$('tkPause').onclick=()=>{this.paused=!this.paused;$('ticker').classList.toggle('paused',this.paused);$('tkPause').setAttribute('aria-pressed',this.paused);$('tkPause').setAttribute('aria-label',this.paused?'הפעלת המבזקים':'עצירת המבזקים')};this.render()},
+  init(){$('tkPause').onclick=()=>{this.paused=!this.paused;$('ticker').classList.toggle('paused',this.paused);$('tkPause').setAttribute('aria-pressed',this.paused);$('tkPause').setAttribute('aria-label',this.paused?'הפעלת המבזקים':'עצירת המבזקים')};const vp=$('ticker').querySelector('.tk-viewport');vp.addEventListener('pointerdown',()=>$('ticker').classList.add('hold'));['pointerup','pointercancel','pointerleave'].forEach(ev=>vp.addEventListener(ev,()=>$('ticker').classList.remove('hold')));this.render()},
   items(){const s=snaps[cur],p=snaps[cur-1];const scr=loc.name?'loc':reports.id?'rep':nav.cur;const out=[];const rf=ref2022(s.time);const mov=r=>`${r.name} ${f1(r.pct)}% הצביעו`;
     const P=groups('profile');const top=[...P].sort((a,b)=>b.wt-a.wt);const big=rows.filter(r=>r.elig>=50000);
-    const push=(t,go,c)=>out.push({t,go,c});
+    const push=(t,go,c,tag)=>out.push({t:(tag?`<em>${tag}</em>`:'')+t,go,c});const S=groups('sector'),Ty=groups('type');const nxt=autoRefresh.next();
+    if(nxt)push(`רענון אוטומטי בעוד <b>${nxt}</b> דק׳ · עד 01:00`,null,'var(--p-none)','חי');
     if(scr==='loc'&&loc.name){const r=byName.get(loc.name);const G=P.find(g=>g.name===r.profile);push(`<b>${esc(r.name)}</b> ${f1(r.pct)}% הצביעו · ${signed(r.pct-s.pct)} נק׳ מול הארצי`,null,colorOf('profile',r.profile));if(r.delta!=null)push(`מאז ${p.time}: <b>${signed(r.delta)}</b> נק׳ ביישוב, ${signed(s.pct-p.pct)} בארצי`);if(G)push(`הפרופיל "${esc(r.profile)}" כולו: <b>${f1(G.wt)}%</b> הצביעו`,()=>setFilter('profile',r.profile,true),colorOf('profile',r.profile));if(r.t22!=null)push(`ב-2022 הצביעו כאן בסוף היום <b>${f1(r.t22)}%</b> · הושגו ${r.pace}%`);const nb=rows.filter(x=>x.profile===r.profile&&x.elig>=Math.max(2000,r.elig/3)&&x.name!==r.name).sort((a,b)=>Math.abs(a.pct-r.pct)-Math.abs(b.pct-r.pct)).slice(0,2);nb.forEach(x=>push(`דומה: ${mov(x)}`,()=>loc.open(x.name)))}
     else if(scr==='city'||scr==='rep'||scr==='home'){push(`ארצי <b>${f1(s.pct)}%</b> הצביעו · ${fmt(s.voters)} מצביעים · נכון ל-${esc(s.time)}`,()=>nav.tab('home'));
       push(`מול 2022 באותה שעה (${f1(rf.v)}%): <b>${signed(s.pct-rf.v)}</b> נק׳`,()=>sheet.info('home'),s.pct>=rf.v?'var(--up)':'var(--down)');
@@ -1042,13 +1109,25 @@ const ticker={paused:false,
       else{push(`מוביל: <b>${esc(top[0].name)}</b> ${f1(top[0].wt)}% הצביעו`,()=>setFilter('profile',top[0].name,true),colorOf('profile',top[0].name));const lo=top[top.length-1];push(`מפגר: <b>${esc(lo.name)}</b> ${f1(lo.wt)}% הצביעו`,()=>setFilter('profile',lo.name,true),colorOf('profile',lo.name))}
       if(p){const ris=rows.filter(r=>r.delta!=null&&r.elig>=5000).sort((a,b)=>b.delta-a.delta)[0];if(ris)push(`המזנק מאז ${p.time}: <b>${esc(ris.name)}</b> ${signed(ris.delta)} נק׳`,()=>loc.open(ris.name))}
       const bh=[...big].sort((a,b)=>b.pct-a.pct)[0],bl=[...big].sort((a,b)=>a.pct-b.pct)[0];if(bh)push(`עיר גדולה מובילה: ${mov(bh)}`,()=>loc.open(bh.name));if(bl)push(`עיר גדולה מפגרת: ${mov(bl)}`,()=>loc.open(bl.name));
-      if(city.lostAnchor)push(`${city.lostAnchor.n} יישובים ללא מיקום במפה עומדים בגוש בים`,()=>sheet.info('city'))}
-    else if(scr==='list'){const fl=rows.filter(matches);push(`<b>${fl.length}</b> יישובים${filter.k?' ב'+esc(filter.v):''} · חציון ${f1(median(fl.filter(r=>r.pct>=3).map(r=>r.pct)))}% הצביעו`);const ab=fl.filter(r=>r.pct>=s.pct).length;push(`<b>${ab}</b> מעל הארצי (${f1(s.pct)}%), ${fl.length-ab} מתחת`);const h=[...fl].filter(r=>r.elig>=2000).sort((a,b)=>b.pct-a.pct)[0],l=[...fl].filter(r=>r.elig>=2000).sort((a,b)=>a.pct-b.pct)[0];if(h)push(`הגבוה: ${mov(h)}`,()=>loc.open(h.name));if(l)push(`הנמוך: ${mov(l)}`,()=>loc.open(l.name));if(p){const ris=fl.filter(r=>r.delta!=null&&r.elig>=5000).sort((a,b)=>b.delta-a.delta)[0];if(ris)push(`המזנק: <b>${esc(ris.name)}</b> ${signed(ris.delta)} נק׳ מאז ${p.time}`,()=>loc.open(ris.name))}}
+      if(city.lostAnchor)push(`${city.lostAnchor.n} יישובים ללא מיקום במפה עומדים בגוש בים`,()=>sheet.info('city'));
+      duels.list().forEach(d=>push(`${esc(d.a.name)} <b>${f1(d.a.wt)}%</b> מול ${esc(d.b.name)} <b>${f1(d.b.wt)}%</b> · ${esc(d.verdict)}`,()=>reports.open('duels'),d.a.wt>=d.b.wt?d.a.c:d.b.c,'מי מול מי'));
+      P.forEach(g=>push(`${esc(g.name)}: <b>${f1(g.wt)}%</b> הצביעו · ${f1(g.share)}% מהבוחרים`,()=>setFilter('profile',g.name,true),colorOf('profile',g.name),'פרופיל'));
+      S.slice(0,4).forEach(g=>push(`${esc(g.name)}: <b>${f1(g.wt)}%</b> הצביעו`,()=>setFilter('sector',g.name,true),colorOf('sector',g.name),'מגזר'));
+      const kib=Ty.find(g=>g.name==='קיבוץ'),mos=Ty.find(g=>g.name==='מושב / קהילתי'),cty=Ty.find(g=>g.name==='עיר');if(kib&&mos)push(`קיבוצים <b>${f1(kib.wt)}%</b> · מושבים <b>${f1(mos.wt)}%</b>${cty?' · ערים <b>'+f1(cty.wt)+'%</b>':''} הצביעו`,()=>{render.gkey='type';nav.tab('groups');render.groups()},'var(--gold)','סוג');
+      push(`סופי 2022: <b>${REF.final}%</b> · חסרות <b>${f1(Math.max(0,REF.final-s.pct))}</b> נק׳ להשוואה`,()=>sheet.info('home'),'var(--gold)','2022');
+      big.sort((a,b)=>b.elig-a.elig).slice(0,8).forEach(r=>push(`${esc(r.name)}: <b>${f1(r.pct)}%</b> הצביעו · ${signed(r.pct-s.pct)} מול ארצי`,()=>loc.open(r.name),colorOf('profile',r.profile),'עיר'));
+      const ex=explained();push(`<b>${fmt(Math.max(0,s.voters-ex.votes))}</b> מצביעים מחוץ ליישובים (מעטפות כפולות ועוד)`,()=>sheet.info('home'),'var(--p-none)','אחר')}
+    else if(scr==='list'){const fl=rows.filter(matches);push(`<b>${fl.length}</b> יישובים${filter.k?' ב'+esc(filter.v):''} · חציון ${f1(median(fl.filter(r=>r.pct>=3).map(r=>r.pct)))}% הצביעו`);const ab=fl.filter(r=>r.pct>=s.pct).length;push(`<b>${ab}</b> מעל הארצי (${f1(s.pct)}%), ${fl.length-ab} מתחת`);const h=[...fl].filter(r=>r.elig>=2000).sort((a,b)=>b.pct-a.pct)[0],l=[...fl].filter(r=>r.elig>=2000).sort((a,b)=>a.pct-b.pct)[0];if(h)push(`הגבוה: ${mov(h)}`,()=>loc.open(h.name));if(l)push(`הנמוך: ${mov(l)}`,()=>loc.open(l.name));if(p){fl.filter(r=>r.delta!=null&&r.elig>=5000).sort((a,b)=>b.delta-a.delta).slice(0,4).forEach(ris=>push(`מזנק: <b>${esc(ris.name)}</b> ${signed(ris.delta)} נק׳ מאז ${p.time}`,()=>loc.open(ris.name),colorOf('profile',ris.profile),'מגמה'));fl.filter(r=>r.delta!=null&&r.elig>=5000).sort((a,b)=>a.delta-b.delta).slice(0,2).forEach(r=>push(`הכי איטי: <b>${esc(r.name)}</b> ${signed(r.delta)} נק׳`,()=>loc.open(r.name),'var(--down)','מגמה'))}
+      [...fl].filter(r=>r.elig>=20000).sort((a,b)=>b.pct-a.pct).slice(0,5).forEach(r=>push(`${esc(r.name)}: <b>${f1(r.pct)}%</b> הצביעו`,()=>loc.open(r.name),colorOf('profile',r.profile),'גדולה'))}
     else if(scr==='groups'){const k=render.gkey;const G=groups(k);const t=[...G].sort((a,b)=>b.wt-a.wt);push(`<b>${esc(t[0].name)}</b> מובילים: ${f1(t[0].wt)}% הצביעו`,()=>setFilter(k,t[0].name),colorOf(k,t[0].name));const lo=t[t.length-1];push(`<b>${esc(lo.name)}</b> אחרונים: ${f1(lo.wt)}% הצביעו`,()=>setFilter(k,lo.name),colorOf(k,lo.name));const bg=[...G].sort((a,b)=>b.contrib-a.contrib)[0];push(`הכי הרבה נקודות לארצי: <b>${esc(bg.name)}</b> ${f1(bg.contrib)} מתוך ${f1(s.pct)}`,null,colorOf(k,bg.name));if(p){const Gp=groupsAt(cur-1,k).groups;const mv=[...G].filter(g=>Gp[g.name]).sort((a,b)=>(b.wt-Gp[b.name].wt)-(a.wt-Gp[a.name].wt))[0];if(mv)push(`המזנקים מאז ${p.time}: <b>${esc(mv.name)}</b> ${signed(mv.wt-Gp[mv.name].wt)} נק׳`,()=>setFilter(k,mv.name),colorOf(k,mv.name))}}
-    else if(scr==='ask'){['סיכום המצב ב-4 משפטים','מי תורם הכי הרבה לאחוז הארצי?','איזו עיר גדולה הכי רחוקה מ-2022?','הקיבוצים מול המושבים','ערים מעורבות מול ערים יהודיות'].forEach(q=>push(`שאל: ${q}`,()=>ask.send(q)))}
+    else if(scr==='ask'){['סיכום המצב ב-4 משפטים','ימין מול שמאל: מי מצביע יותר?','ערבים מול יהודים עכשיו','מי תורם הכי הרבה לאחוז הארצי?','איזו עיר גדולה הכי רחוקה מ-2022?','הקיבוצים מול המושבים','מה קרה בנגב מאז הצהריים?','ירושלים מול בני ברק'].forEach(q=>push(`${q}`,()=>ask.send(q),'var(--gold)','שאל'));push(`ארצי <b>${f1(s.pct)}%</b> הצביעו · ${esc(s.time)}`,null)}
     return out},
   render(){const items=this.items();if(!items.length){$('ticker').hidden=true;return}$('ticker').hidden=false;const html=items.map((x,i)=>`<button data-i="${i}" style="--c:${x.c||'var(--gold)'}"><i></i>${x.t}</button>`).join('');$('tkTrack').innerHTML=html+html;
-    $('tkTrack').querySelectorAll('button').forEach(b=>b.onclick=()=>{const it=items[+b.dataset.i];if(it.go)it.go()});requestAnimationFrame(()=>{const w=$('tkTrack').scrollWidth/2;$('tkTrack').style.setProperty('--dur',Math.max(18,Math.round(w/38))+'s')})}};
+    $('tkTrack').querySelectorAll('button').forEach(b=>b.onclick=()=>{const it=items[+b.dataset.i];if(it.go)it.go()});requestAnimationFrame(()=>{const w=$('tkTrack').scrollWidth/2;$('tkTrack').style.setProperty('--dur',Math.max(20,Math.round(w/55))+'s')})}};
+/* ===== auto refresh: every 15 minutes until 01:00 (Israel), picks up newly published data ===== */
+const autoRefresh={until:new Date('2026-10-28T01:00:00+02:00').getTime(),every:15*60*1000,t0:Date.now(),
+  next(){const now=Date.now();if(now>this.until)return null;return Math.max(1,Math.ceil((this.t0+this.every-now)/60000))},
+  init(){if(window.claude)return;setInterval(()=>{const now=Date.now();if(now>this.until)return;if(now-this.t0>=this.every&&document.visibilityState==='visible'&&!ask.busy){toast('מרענן נתונים…');setTimeout(()=>location.reload(),600)}},30000)}};
 
 /* ===== install as an app ===== */
 const install={ev:null,ios:/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream,standalone:matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,
@@ -1059,7 +1138,7 @@ const install={ev:null,ios:/iphone|ipad|ipod/i.test(navigator.userAgent)&&!windo
     sheet.open(`<button class="ibtn close" data-close aria-label="סגירה">✕</button><h2>להתקין כאפליקציה</h2><p>באייפון: לוחצים על כפתור <b>שיתוף</b> (הריבוע עם החץ למעלה) בתחתית ספארי, ואז <b>"הוסף למסך הבית"</b>. האפליקציה נפתחת במסך מלא, בלי סרגל כתובת.</p><p>באנדרואיד ובמחשב: בכרום, תפריט ⋮ ואז <b>"התקן אפליקציה"</b> או <b>"הוסף למסך הבית"</b>.</p>`);$('sheet').querySelector('[data-close]').onclick=()=>sheet.close()}};
 /* ===== boot ===== */
 window.KAI={city,loc,sheet,nav,snaps,ask,reports,get rows(){return rows},get filter(){return filter},setFilter,show};
-theme.init();nav.init();install.init();derive(snaps.length-1);cur=snaps.length-1;ask.init();render.groups();city.init();show(snaps.length-1);ticker.init();draggable($('chip'),'chip');draggable($('pick'),'pick');
+theme.init();nav.init();install.init();derive(snaps.length-1);cur=snaps.length-1;ask.init();render.groups();city.init();show(snaps.length-1);ticker.init();autoRefresh.init();draggable($('chip'),'chip');draggable($('pick'),'pick');
 (async()=>{if(!window.claude||!claude.use)return;
   try{sampleFn=await claude.use('sample')}catch(_){}
   try{userRef=await claude.use('user')}catch(_){}
