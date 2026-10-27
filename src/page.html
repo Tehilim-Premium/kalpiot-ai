@@ -170,8 +170,15 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .timeline button span{font-size:11px;color:var(--mute)}
 .timeline button[aria-pressed="true"]{background:var(--flag);border-color:var(--flag);color:#fff}
 .timeline button[aria-pressed="true"] span{color:rgba(255,255,255,.8)}
+.timeline button em{font-style:normal;font-size:10.5px;font-weight:700;color:var(--mute)}.timeline button em.up{color:var(--up)}.timeline button em.down{color:var(--down)}.timeline button[aria-pressed="true"] em{color:var(--gold-soft)}
 .timeline button.add{border-style:dashed;color:var(--mute);justify-content:center;font-size:20px;min-width:52px}
-.card{background:var(--s1);border:1px solid var(--line);border-radius:var(--r);padding:14px;box-shadow:var(--d2);margin-bottom:12px}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:var(--r);padding:14px;box-shadow:var(--d2);margin-bottom:12px;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+@media (hover:hover){.card:hover{transform:translateY(-2px);box-shadow:var(--d3)}}
+.vs22{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--s1);border:1px solid var(--line);display:grid;gap:7px;box-shadow:var(--d2)}
+.vs22 .t{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;font-size:var(--t-s);color:var(--mute)}.vs22 .t b{font-size:13.5px}.vs22 .t b.up{color:var(--up)}.vs22 .t b.down{color:var(--down)}
+.vs22 .b{display:grid;grid-template-columns:minmax(96px,120px) 1fr 52px;align-items:center;gap:8px;font-size:12.5px;color:var(--ink2)}.vs22 .b i{display:block;height:10px;border-radius:5px;background:var(--s2);position:relative;overflow:hidden}.vs22 .b i::after{content:"";position:absolute;inset:0 0 0 auto;width:var(--w);border-radius:5px;background:var(--flag);transition:width .9s var(--ease)}.vs22 .b.same i::after{background:var(--gold);opacity:.75}.vs22 .b.fin i::after{background:var(--gold)}.vs22 .b b{text-align:end;font-size:14px;font-weight:900}
+.vs22 .verdict{font-size:13px;color:var(--ink2);padding-top:4px;border-top:1px dashed var(--line)}.vs22 .verdict b{color:var(--down)}.vs22 .verdict.up b{color:var(--up)}
+.lrow .sub .c22{color:var(--mute)}.lrow .sub .c22 b{font-weight:700}.prow .t small b,.grow .h small b{font-weight:700}.prow .t small b.up,.grow .h small b.up{color:var(--up)}.prow .t small b.down,.grow .h small b.down{color:var(--down)}
 .card h3{font-family:var(--font);font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .card h3 .small{font-weight:400;margin-inline-start:auto}
 .prof{display:grid;gap:4px}
@@ -202,7 +209,11 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .seg button[aria-pressed="true"]{background:var(--s1);color:var(--ink);box-shadow:var(--d2);font-weight:700}
 
 /* ===== list ===== */
-.search{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.search{display:flex;gap:8px;align-items:center;margin-bottom:10px;position:relative}
+.qsugg{position:absolute;top:calc(100% + 4px);inset-inline:0;z-index:8;background:var(--s1);border:1px solid var(--line-strong);border-radius:14px;box-shadow:var(--d3);overflow:hidden;animation:kai-pop .2s var(--ease)}
+.qsugg button{display:grid;grid-template-columns:10px 1fr auto;gap:10px;align-items:center;width:100%;padding:10px 12px;text-align:start;border-bottom:1px solid var(--line)}.qsugg button:last-child{border-bottom:0}.qsugg button:hover,.qsugg button.on{background:var(--s2)}
+.qsugg i{width:10px;height:10px;border-radius:3px;background:var(--c)}.qsugg b{font-size:14px}.qsugg small{display:block;color:var(--mute);font-size:11px}.qsugg .v{font-weight:900;font-size:16px}.qsugg .v small{display:inline;font-weight:500}
+.seg.sort{margin:0 0 8px}.seg.sort button{padding:6px 4px;font-size:12px}
 .search label{flex:1;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--s1);height:44px}
 .search label svg{width:18px;height:18px;color:var(--mute);flex:none}
 .search input{flex:1;min-width:0;border:0;background:none;height:100%;font-size:15px;outline:none}
@@ -217,7 +228,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .lrow{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;padding:9px 8px;border-radius:12px;text-align:start;width:100%;transition:background .15s;border-inline-start:3px solid var(--c,transparent)}
 .lrow:hover{background:var(--s2)}
 .lrow .nm{font-weight:700;font-size:14.5px;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lrow .sub{grid-column:1;font-size:11px;color:var(--mute);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .sub{grid-column:1;font-size:11px;color:var(--mute);line-height:1.35;white-space:normal}
 .lrow .pv{grid-row:1/3;text-align:end;line-height:1.05}
 .lrow .pv b{font-size:19px;font-weight:900;display:block}
 .lrow .pv small{font-size:10.5px;color:var(--mute)}
@@ -325,6 +336,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .ticker{flex:none;order:1;height:34px;display:flex;align-items:stretch;background:var(--flag-deep);color:#fff;overflow:hidden;position:relative;z-index:6;border-top:1px solid rgba(255,255,255,.12)}
 .tk-pause{width:36px;flex:none;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#fff}
 .tk-pause svg{width:14px;height:14px}
+.tk-open{width:36px;flex:none;display:grid;place-items:center;background:var(--gold);color:#1a1200}.tk-open svg{width:16px;height:16px}
 .tk-pause[aria-pressed="true"]{background:var(--gold);color:#1a1200}
 .tk-viewport{flex:1;min-width:0;overflow:hidden;position:relative}
 .tk-track{position:absolute;top:0;inset-inline-start:0;height:100%;display:flex;align-items:center;gap:0;white-space:nowrap;will-change:transform;animation:kai-tk var(--dur,60s) linear infinite}
@@ -337,7 +349,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 @keyframes kai-tk{from{transform:translateX(0)}to{transform:translateX(50%)}}
 @media (prefers-reduced-motion:reduce){.tk-track{animation:none;position:static;overflow:auto}}
 .splitter{display:none}
-@media (min-width:900px){.ticker{grid-column:1/-1;grid-row:2;height:50px;border-top:1px solid rgba(255,255,255,.14)}.tk-pause{width:50px}.tk-pause svg{width:18px;height:18px}.tk-track button{height:50px;padding:0 18px;font-size:16.5px;gap:10px}.tk-track button em{font-size:12.5px;padding:3px 9px}.tk-track button i{width:8px;height:8px}.tabbar button{font-size:14px}}
+@media (min-width:900px){.ticker{grid-column:1/-1;grid-row:2;height:50px;border-top:1px solid rgba(255,255,255,.14)}.tk-pause{width:50px}.tk-pause svg{width:18px;height:18px}.tk-open{width:56px}.tk-open svg{width:20px;height:20px}.tk-track button{height:50px;padding:0 18px;font-size:16.5px;gap:10px}.tk-track button em{font-size:12.5px;padding:3px 9px}.tk-track button i{width:8px;height:8px}.tabbar button{font-size:14px}}
 /* leaders for displaced labels */
 .leaders{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .leaders line{stroke:var(--ink);stroke-opacity:.45;stroke-width:1}
@@ -452,6 +464,30 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .tline small{font-size:11px;color:var(--mute)}
 @media print{.top,.tabbar,.stage,.btns,.lnav{display:none!important}.layer{position:static;overflow:visible}body,html{overflow:visible;height:auto}}
 
+/* ===== briefing: the ticker, big ===== */
+.brief{position:fixed;inset:0;z-index:35;overflow:auto;overscroll-behavior:contain;background:radial-gradient(900px 520px at 50% -8%,color-mix(in srgb,var(--flag) 28%,transparent),transparent 70%),var(--bg);color:var(--ink);padding:0 0 calc(40px + env(safe-area-inset-bottom,0px));animation:kai-pop .35s var(--ease)}
+.brief[hidden]{display:none}
+.bf-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bf-top h2{font-size:22px;flex:1;min-width:0;display:flex;align-items:center;gap:10px}.bf-top h2 small{font-family:var(--font);font-size:12.5px;color:var(--mute);font-weight:500}
+.bf-top .live{background:var(--s2);color:var(--ink2)}
+.bf-wrap{max-width:1180px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.bf-hero{min-height:230px;padding:26px 0 6px;text-align:center;display:grid;justify-items:center;align-content:center;gap:6px}
+.bf-hero .tag{display:inline-block;padding:4px 12px;border-radius:999px;background:var(--s2);font-size:12.5px;color:var(--ink2);font-weight:600}
+.bf-hero .big{font-size:clamp(64px,13vw,150px);font-weight:900;line-height:.95;letter-spacing:-.04em;background:linear-gradient(180deg,var(--gold-soft),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.bf-hero .txt{font-family:var(--serif);font-size:clamp(19px,3vw,32px);line-height:1.3;max-width:900px;text-wrap:balance}.bf-hero .txt b{color:var(--gold)}
+.bf-hero.in>*{animation:kai-rise .55s var(--ease) both}.bf-hero.in>:nth-child(2){animation-delay:.08s}.bf-hero.in>:nth-child(3){animation-delay:.16s}
+.bf-dots{display:flex;justify-content:center;gap:6px;margin:10px 0 4px}.bf-dots i{width:6px;height:6px;border-radius:3px;background:var(--line-strong);transition:all .3s}.bf-dots i.on{background:var(--gold);width:20px}
+.bf-22{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 4px}
+.bf-22 div{padding:14px 10px;border-radius:16px;background:var(--s1);border:1px solid var(--line);text-align:center;box-shadow:var(--d2);border-top:3px solid var(--c,var(--flag))}
+.bf-22 b{display:block;font-size:clamp(24px,6vw,38px);font-weight:900;line-height:1}.bf-22 small{display:block;color:var(--mute);font-size:12px;margin-top:5px}.bf-22 .d{font-weight:700;font-size:13px;margin-top:4px}.bf-22 .up{color:var(--up)}.bf-22 .down{color:var(--down)}
+.bf-sec{margin:20px 0 8px;display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:21px;font-weight:700}.bf-sec::after{content:"";flex:1;height:1px;background:var(--line)}.bf-sec small{font-family:var(--font);font-size:12px;color:var(--mute);font-weight:500}
+.bf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.bf-card{display:grid;gap:6px;align-content:start;padding:16px;border-radius:16px;background:var(--s1);border:1px solid var(--line);border-inline-start:4px solid var(--c,var(--gold));text-align:start;box-shadow:var(--d2);transition:transform .25s var(--ease),box-shadow .25s var(--ease);animation:kai-rise .5s var(--ease) both;cursor:pointer}
+.bf-card:hover{transform:translateY(-2px);box-shadow:var(--d3)}.bf-card.static{cursor:default}
+.bf-card .big{font-size:36px;font-weight:900;line-height:1;color:var(--c,var(--gold));letter-spacing:-.02em}.bf-card .big small,.bf-hero .big small{font-size:.42em;font-weight:700;margin-inline-start:4px;letter-spacing:0}.bf-hero .big small{-webkit-text-fill-color:var(--gold)}.bf-card .txt{font-size:15px;line-height:1.45;color:var(--ink2)}.bf-card .txt b{color:var(--ink)}
+.bf-card em{font-style:normal;font-size:11px;color:var(--mute);font-weight:600;letter-spacing:.02em}
+@media (min-width:900px){.bf-hero{min-height:280px}.bf-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}}
+
 /* ===== sheets ===== */
 .veil{position:fixed;inset:0;z-index:30;background:rgba(3,8,30,.5);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .veil.on{display:flex}
@@ -528,7 +564,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
     <div class="screens" id="screens">
 
       <section class="screen on" data-s="home">
-        <div class="shead"><h2 id="homeTitle">ארצי</h2><button class="ibtn" data-info="home" aria-label="מה מאומת ומה הערכה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></button></div>
+        <div class="shead"><h2 id="homeTitle">ארצי</h2><button class="ibtn" data-info="home" aria-label="מה מאומת ומה הערכה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></button><button class="ibtn gold" id="btnBrief" aria-label="המבזקים במסך מלא" title="המבזקים במסך מלא (m)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></button></div>
         <div class="hero" id="hero"></div>
         <div class="timeline" id="timeline"></div>
         <div class="card"><h3>מי מול מי <span class="small">לחיצה פותחת דוח</span></h3><div id="duelsHome"></div></div>
@@ -538,9 +574,10 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 
       <section class="screen" data-s="list">
         <div class="shead"><h2 id="listTitle">יישובים</h2><button class="ibtn" data-info="list" aria-label="הסבר"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></button></div>
-        <div class="search"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg><input id="q" placeholder="שם יישוב" autocomplete="off" inputmode="search"></label></div>
+        <div class="search"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg><input id="q" placeholder="שם יישוב" autocomplete="off" inputmode="search"></label><div class="qsugg" id="qSugg" hidden></div></div>
         <div class="chips" id="chips"></div>
-        <div class="sortrow"><span id="count"></span><select id="sort" aria-label="מיון"><option value="pct">הגבוהים קודם</option><option value="low">הנמוכים קודם</option><option value="elig">הגדולים קודם</option><option value="delta">השינוי הגדול</option><option value="name">לפי שם</option></select></div>
+        <div class="sortrow"><span id="count"></span><select id="sort" hidden aria-hidden="true"><option value="pct">הגבוהים קודם</option><option value="low">הנמוכים קודם</option><option value="elig">הגדולים קודם</option><option value="delta">השינוי הגדול</option><option value="vs22">מול 2022</option><option value="name">לפי שם</option></select></div>
+        <div class="seg sort" id="sortSeg" role="group" aria-label="מיון"><button data-v="pct" aria-pressed="true">גבוהים</button><button data-v="low" aria-pressed="false">נמוכים</button><button data-v="elig" aria-pressed="false">גדולים</button><button data-v="delta" aria-pressed="false">שינוי</button><button data-v="vs22" aria-pressed="false">מול 2022</button><button data-v="name" aria-pressed="false">שם</button></div>
         <div class="rows" id="rows"></div>
         <button class="more" id="more">עוד יישובים</button>
       </section>
@@ -576,8 +613,9 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
     <div class="legend" id="legend" aria-label="מקרא צבעים"></div>
     <div class="pick-card" id="pick"></div>
   </section>
-  <div class="ticker" id="ticker" aria-label="מבזקים"><button class="tk-pause" id="tkPause" aria-label="עצירת המבזקים"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button><div class="tk-viewport"><div class="tk-track" id="tkTrack"></div></div></div>
+  <div class="ticker" id="ticker" aria-label="מבזקים"><button class="tk-pause" id="tkPause" aria-label="עצירת המבזקים"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button><button class="tk-open" id="tkOpen" aria-label="המבזקים במסך מלא" title="המבזקים במסך מלא (m)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><div class="tk-viewport"><div class="tk-track" id="tkTrack"></div></div></div>
 </main>
+<section class="brief" id="brief" aria-label="המבזקים במסך מלא" hidden></section>
 
 <div class="veil" id="veil"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 <div class="toast" id="toast" role="status"></div>
@@ -654,10 +692,12 @@ const nav={stack:[],cur:'home',
     if(s==='city')setTimeout(()=>city.resize(),50);if(s==='ask')setTimeout(()=>{if(!isMobile())$('askIn').focus({preventScroll:true})},300);ticker.render()},
   back(){history.back()},
   init(){addEventListener('popstate',()=>{const k=this.stack.pop();
-    if(k==='loc')loc.close(true);else if(k==='rep')reports.close(true);else if(k==='sheet')sheet.close(true);else if(k==='full')city.full(false,true);else if(k&&k.startsWith('tab:'))this.tab(k.slice(4),true);
+    if(k==='loc')loc.close(true);else if(k==='brief')brief.close(true);else if(k==='rep')reports.close(true);else if(k==='sheet')sheet.close(true);else if(k==='full')city.full(false,true);else if(k&&k.startsWith('tab:'))this.tab(k.slice(4),true);
     else{this.tab('home',true);this.push('root')}});
     this.push('root');
-    addEventListener('keydown',e=>{if(e.key==='Escape'){if($('veil').classList.contains('on'))sheet.close();else if($('stage').classList.contains('full'))city.full(false);else if(reports.id)reports.close();else if(loc.name)loc.close()}})}};
+    addEventListener('keydown',e=>{if(e.key==='Escape'){if($('veil').classList.contains('on'))sheet.close();else if(brief.on)brief.close();else if($('stage').classList.contains('full'))city.full(false);else if(reports.id)reports.close();else if(loc.name)loc.close();return}
+      if(e.ctrlKey||e.metaKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))return;const tabs={1:'home',2:'city',3:'list',4:'groups',5:'ask'};
+      if(tabs[e.key]){if(brief.on)brief.close();if(e.key==='2'&&!isMobile())return;this.tab(tabs[e.key])}else if(e.key==='/'){e.preventDefault();if(brief.on)brief.close();this.tab('list');setTimeout(()=>$('q').focus(),80)}else if(e.key==='m'||e.key==='M'||e.key==='צ'){brief.on?brief.close():brief.open()}else if(e.key==='f'||e.key==='F'||e.key==='כ'){if(!brief.on)city.full(!$('stage').classList.contains('full'))}else if(e.key==='t'||e.key==='T'||e.key==='א'){theme.toggle()}})}};
 document.querySelectorAll('#tabs [role=tab]').forEach(b=>b.onclick=()=>nav.tab(b.dataset.s));
 document.querySelectorAll('[data-info]').forEach(b=>b.onclick=()=>sheet.info(b.dataset.info));
 
@@ -668,7 +708,8 @@ const sheet={open(html){$('sheet').innerHTML='<div class="grip"></div>'+html;$('
     const T={home:`<h2>מה מאומת ומה הערכה</h2>
       <p><span class="vt v">מאומת</span>אחוזי ההצבעה הארציים ולפי יישוב, נכון לשעה ${esc(s.time)}: ועדת הבחירות המרכזית. בעלי זכות הבחירה ותוצאות 2022 לכל יישוב: הקובץ הרשמי של הכנסת ה-25.</p>
       <p><span class="vt e">הערכה</span>בוחרים 2026 ביישוב = בעלי זכות 2022 × ${SCALE}. "הצביעו" ביישוב = בוחרים × אחוז. ${r.exact?'':'2022 באותה שעה: חישוב ליניארי בין '+hhmm(r.a[0])+' ('+f1(r.a[1])+'%) ל-'+(r.b?hhmm(r.b[0])+' ('+f1(r.b[1])+'%)':'')+'. '}הפרופיל של יישוב נקבע מחלוקת הקולות שלו ב-2022: ערבי = רוב למפלגות הערביות; חרדי = ג+שס מעל 45%; דתי-לאומי = ט מעל 35%; ימין = גוש הקואליציה מעל 55%; שמאל = אמת+מרצ מעל 30%; מרכז-שמאל = גוש האופוזיציה מעל 50%.</p>
-      <p>הדף מתרענן מעצמו כל 15 דקות עד 01:00 כדי לקלוט נקודות זמן חדשות שפורסמו.</p>
+      <p>הדף מתרענן מעצמו כל 15 דקות כדי לקלוט נקודות זמן חדשות שפורסמו. <b>מול 2022</b>: שלושה פסים, היום / 2022 באותה שעה / 2022 סופי, וההפרש בנקודות.</p>
+      <p><b>מקלדת:</b> 1–5 מסכים · / חיפוש · m מבזקים במסך מלא · f מסך מלא לעיר · t בהיר/כהה · Esc חזרה.</p>
       <p>${fmt(ex.votes)} מצביעים מוסברים ביישובים מתוך ${fmt(s.voters)} הארציים. ההפרש (${fmt(Math.max(0,s.voters-ex.votes))}) הוא "אחר": מעטפות כפולות, יישובים ללא נתוני 2022 וטעות ההערכה.</p>`,
       list:`<h2>רשימת היישובים</h2><p>כל יישוב שוועדת הבחירות פרסמה עבורו אחוז הצבעה בשעה ${esc(s.time)}. המספר הגדול = אחוז ההצבעה ביישוב. השינוי = מאז נקודת הזמן הקודמת. סינון לפי פרופיל, חיפוש לפי שם, ולחיצה פותחת כרטיס יישוב.</p><p><span class="vt e">הערכה</span>סיווג מגזר וסוג יישוב ל-${Object.values(CLS).filter(c=>c.est).length} יישובים נקבע לפי כללים (גודל, שם, תוצאה 2022) ולא נבדק ידנית.</p>`,
       groups:`<h2>איך לקרוא את הפסים</h2><p>אורך הפס = כמה מהבוחרים בקבוצה כבר הצביעו. הקו הכהה = האחוז הארצי עכשיו. קו הזהב = התוצאה הסופית של אותה קבוצה ב-2022. המספר הקטן = איזה חלק מכלל הבוחרים הקבוצה מהווה.</p><p>הפס המחולק למטה: כל קבוצה תורמת נקודות לאחוז הארצי לפי המצביעים שלה. הקטע המקווקו "אחר" = מצביעים שאינם מוסברים ביישובים.</p>`,
@@ -701,28 +742,34 @@ const render={
     $('hero').innerHTML=`<div class="when"><b>${esc(s.time)}</b><span>יום הבחירות לכנסת ה-26</span></div>
       <div class="big num" id="bigPct"><span data-count="${s.pct}">${f1(s.pct)}</span><small>%</small></div><div class="lab">מהבוחרים כבר הצביעו</div>
       <div class="row"><span><b>${fmt(s.voters)}</b> הצביעו</span><span>מתוך <b>${fmt(s.eligible)}</b> בעלי זכות</span>${p?`<span><span class="d ${s.pct-p.pct>=0?'up':'down'}">${signed(s.pct-p.pct)}</span> נק׳ מאז ${esc(p.time)}</span>`:''}</div>
-      <div class="row"><span>2022 באותה שעה: <b>${f1(r.v)}%</b>${r.exact?'':' <span class="est">~</span>'}</span><span class="d ${d>=0?'up':'down'}">${signed(d)} נק׳ ${d>=0?'מעל':'מתחת ל'}-2022</span></div>
+      <div class="vs22"><div class="t"><span>מול 2022</span><b class="${d>=0?'up':'down'}">${signed(d)} נק׳ ${d>=0?'מעל':'מתחת ל'}-2022 באותה שעה${r.exact?'':' <span class="est">~</span>'}</b></div>
+        <div class="b now"><span>היום ${esc(s.time)}</span><i style="--w:${clamp(s.pct,0,100)}%"></i><b>${f1(s.pct)}%</b></div>
+        <div class="b same"><span>2022 באותה שעה${r.exact?'':'~'}</span><i style="--w:${clamp(r.v,0,100)}%"></i><b>${f1(r.v)}%</b></div>
+        <div class="b fin"><span>2022 סופי</span><i style="--w:${REF.final}%"></i><b>${REF.final}%</b></div>
+        <div class="verdict ${s.pct>=REF.final?'up':''}">${s.pct>=REF.final?`עברנו את הסופי של 2022 ב-<b>${f1(s.pct-REF.final)}</b> נק׳`:`חסרות <b>${f1(REF.final-s.pct)}</b> נק׳ לסופי של 2022`}</div></div>
       ${snaps.length>1?`<div class="curve">${reports.chart([{name:'2022',v:snaps.map(x=>ref2022(x.time).v),cls:'ref'},{name:'היום',v:snaps.map(x=>x.pct),cls:'nat'}],snaps.map(x=>x.time),{h:150,label:'מהלך היום מול 2022'})}</div>`:''}`;
-    $('timeline').innerHTML=snaps.map((x,i)=>`<button aria-pressed="${i===cur}" data-i="${i}"><b>${f1(x.pct)}%</b><span>${esc(x.time)}</span></button>`).join('')+`<button class="add" id="addSnap" aria-label="הוספת נקודת זמן">+</button>`;
+    $('timeline').innerHTML=snaps.map((x,i)=>`<button aria-pressed="${i===cur}" data-i="${i}" title="${esc(x.time)}: ${f1(x.pct)}% הצביעו${i?' · '+signed(x.pct-snaps[i-1].pct)+' נק׳ מאז '+esc(snaps[i-1].time):''}"><b>${f1(x.pct)}%</b><span>${esc(x.time)}</span>${i?`<em class="${x.pct-snaps[i-1].pct>=0?'up':'down'}">${signed(x.pct-snaps[i-1].pct)}</em>`:'<em>פתיחה</em>'}</button>`).join('')+`<button class="add" id="addSnap" aria-label="הוספת נקודת זמן">+</button>`;
     $('timeline').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>show(+b.dataset.i));$('addSnap').onclick=()=>sheet.update();
+    countUp($('bigPct').firstElementChild,s.pct,this._lastPct);this._lastPct=s.pct;
     this.prof();reports.grid();$('duelsHome').innerHTML=duels.card();duels.bind($('duelsHome'))},
+  sugg(){const q=$('q').value.trim();const box=$('qSugg');if(!q){box.hidden=true;return}const m=rows.filter(r=>r.name.includes(q)).sort((a,b)=>(b.name.startsWith(q)-a.name.startsWith(q))||(b.elig-a.elig)).slice(0,6);if(!m.length){box.hidden=true;return}box.hidden=false;box.innerHTML=m.map(r=>`<button data-n="${esc(r.name)}" style="--c:${colorOf('profile',r.profile)}"><i></i><span><b>${esc(r.name)}</b><small>${esc(r.profile)} · ${esc(r.type)}${r.elig?' · '+fmt(r.elig)+' בוחרים~':''}</small></span><span class="v">${f1(r.pct)}%<small> הצביעו</small></span></button>`).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>{box.hidden=true;loc.open(b.dataset.n)})},
   prof(){const G=groups('profile');const nat=snaps[cur].pct;const max=Math.max(70,...G.map(g=>g.wt))+4;
-    $('profRows').innerHTML=G.map(g=>`<button class="prow ${filter.k==='profile'&&filter.v===g.name?'on':filter.k?'dim':''}" data-v="${esc(g.name)}" style="--c:${colorOf('profile',g.name)};--w:${g.wt/max*100}%;--n:${nat/max*100}%"><i></i><span class="t"><b>${esc(g.name)}</b><small>${f1(g.share)}% מהבוחרים · ${g.n} יישובים</small><span class="bar"><i></i><em></em></span></span><span class="v"><b>${f1(g.wt)}%</b><small>הצביעו</small></span></button>`).join('');
+    $('profRows').innerHTML=G.map(g=>`<button class="prow ${filter.k==='profile'&&filter.v===g.name?'on':filter.k?'dim':''}" data-v="${esc(g.name)}" style="--c:${colorOf('profile',g.name)};--w:${g.wt/max*100}%;--n:${nat/max*100}%"><i></i><span class="t"><b>${esc(g.name)}</b><small>${f1(g.share)}% מהבוחרים · ${g.n} יישובים${g.t22?` · 2022 סופי ${f1(g.t22)}% <b class="${g.wt>=g.t22?'up':'down'}">${signed(g.wt-g.t22)}</b>`:''}</small><span class="bar"><i></i><em></em></span></span><span class="v"><b>${f1(g.wt)}%</b><small>הצביעו</small></span></button>`).join('');
     $('profRows').querySelectorAll('.prow').forEach(b=>b.onclick=()=>setFilter('profile',b.dataset.v,true))},
   chips(){const G=groups('profile');$('chips').innerHTML=`<button aria-pressed="${!filter.k}" data-v="">הכל</button>`+G.map(g=>`<button aria-pressed="${filter.k==='profile'&&filter.v===g.name}" data-v="${esc(g.name)}" style="--c:${colorOf('profile',g.name)}"><i></i>${esc(g.name)}</button>`).join('');
     $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{const v=b.dataset.v;if(!v){filter={k:null,v:null};this.filter()}else setFilter('profile',v)})},
   list(){const q=$('q').value.trim();const k=$('sort').value;let list=rows.filter(r=>matches(r)&&(!q||r.name.includes(q)));
-    list.sort((a,b)=>k==='pct'?b.pct-a.pct:k==='low'?a.pct-b.pct:k==='elig'?b.elig-a.elig:k==='delta'?((b.delta??-99)-(a.delta??-99)):a.name.localeCompare(b.name,'he'));
+    const v22=r=>r.t22!=null?r.pct-r.t22:-99;list.sort((a,b)=>k==='pct'?b.pct-a.pct:k==='low'?a.pct-b.pct:k==='elig'?b.elig-a.elig:k==='delta'?((b.delta??-99)-(a.delta??-99)):k==='vs22'?v22(b)-v22(a):a.name.localeCompare(b.name,'he'));
     $('count').textContent=`${list.length} יישובים${filter.k?' · '+filter.v:''}`;$('listTitle').textContent=q?`"${q}"`:filter.k?filter.v:'יישובים';
     const n=this.shown||60;$('rows').innerHTML=list.length?list.slice(0,n).map(r=>this.row(r)).join(''):`<div class="empty">לא נמצא יישוב בשם הזה</div>`;
     $('more').hidden=list.length<=n;$('more').onclick=()=>{this.shown=n+100;this.list()};
     $('rows').querySelectorAll('.lrow').forEach(b=>b.onclick=()=>loc.open(b.dataset.n))},
   row(r){const c=colorOf('profile',r.profile);const h=snaps.length>1?snaps.map(sn=>{const x=sn.rows.find(z=>z[1]===r.name);return x?x[2]:null}):null;const mini=h&&h.filter(x=>x!=null).length>1?`<svg class="mini" viewBox="0 0 44 16" aria-hidden="true" style="--c:${c}"><polyline points="${h.map((v,i)=>v==null?'':`${(i/(h.length-1))*40+2},${14-(v/100)*12}`).join(' ')}"/>${h.map((v,i)=>v==null?'':`<circle cx="${(i/(h.length-1))*40+2}" cy="${14-(v/100)*12}" r="1.8"/>`).join('')}</svg>`:'';
-    return`<button class="lrow" data-n="${esc(r.name)}" style="--c:${c};--w:${clamp(r.pct,0,100)}%"><span class="nm">${esc(r.name)}</span><span class="pv"><b>${f1(r.pct)}%</b><small>הצביעו</small></span><span class="sub">${esc(r.profile)} · ${esc(r.type)}${r.elig?' · '+fmt(r.elig)+' בוחרים~':''}${r.delta!=null?' · <b class="'+(r.delta>=0?'up':'down')+'">'+signed(r.delta)+' נק׳</b>':''}${mini}</span><span class="bar"><i></i></span></button>`},
+    return`<button class="lrow" data-n="${esc(r.name)}" style="--c:${c};--w:${clamp(r.pct,0,100)}%"><span class="nm">${esc(r.name)}</span><span class="pv"><b>${f1(r.pct)}%</b><small>הצביעו</small></span><span class="sub">${esc(r.profile)} · ${esc(r.type)}${r.elig?' · '+fmt(r.elig)+' בוחרים~':''}${r.delta!=null?' · <b class="'+(r.delta>=0?'up':'down')+'">'+signed(r.delta)+' נק׳</b>':''}${r.t22!=null?' · <span class="c22">2022 '+f1(r.t22)+'% <b class="'+(r.pct>=r.t22?'up':'down')+'">'+signed(r.pct-r.t22)+'</b></span>':''}${mini}</span><span class="bar"><i></i></span></button>`},
   gkey:'profile',
   groups(){$('gseg').querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.k===this.gkey);b.onclick=()=>{this.gkey=b.dataset.k;this.groups();ticker.render()}});this.groupRows()},
   groupRows(){const k=this.gkey,arr=groups(k),s=snaps[cur],nat=s.pct;const max=Math.max(72,...arr.map(g=>Math.max(g.wt,g.t22||0)))+4;const maxS=Math.max(...arr.map(g=>g.share));
-    $('grows').innerHTML=arr.map(g=>`<button class="grow ${filter.k===k&&filter.v===g.name?'on':filter.k?'dim':''}" data-v="${esc(g.name)}" style="--c:${colorOf(k,g.name)};--w:${g.wt/max*100}%;--h:${Math.round(10+22*g.share/maxS)}px"><span class="h"><b>${esc(g.name)}</b><small>${f1(g.share)}% מהבוחרים · ${g.n} יישובים</small><span class="v">${f1(g.wt)}%<small>הצביעו</small></span></span><span class="trk"><span class="fill"></span><span class="mk" style="--x:${nat/max*100}%"></span>${g.t22?`<span class="mk g" style="--x:${g.t22/max*100}%"></span>`:''}</span></button>`).join('');
+    $('grows').innerHTML=arr.map(g=>`<button class="grow ${filter.k===k&&filter.v===g.name?'on':filter.k?'dim':''}" data-v="${esc(g.name)}" style="--c:${colorOf(k,g.name)};--w:${g.wt/max*100}%;--h:${Math.round(10+22*g.share/maxS)}px"><span class="h"><b>${esc(g.name)}</b><small>${f1(g.share)}% מהבוחרים · ${g.n} יישובים${g.t22?` · 2022 סופי ${f1(g.t22)}% <b class="${g.wt>=g.t22?'up':'down'}">${signed(g.wt-g.t22)}</b>`:''}</small><span class="v">${f1(g.wt)}%<small>הצביעו</small></span></span><span class="trk"><span class="fill"></span><span class="mk" style="--x:${nat/max*100}%"></span>${g.t22?`<span class="mk g" style="--x:${g.t22/max*100}%"></span>`:''}</span></button>`).join('');
     $('grows').querySelectorAll('.grow').forEach(b=>b.onclick=()=>setFilter(k,b.dataset.v));
     const ex=explained();const other=Math.max(0,s.voters-ex.votes);const tot=s.voters||1;
     $('stack').innerHTML=arr.map(g=>`<i style="--c:${colorOf(k,g.name)};--w:${100*g.votes/tot}%" title="${esc(g.name)}"></i>`).join('')+`<i class="other" style="--w:${100*other/tot}%" title="אחר"></i>`;
@@ -733,7 +780,8 @@ const render={
     $('legend').querySelectorAll('button').forEach(b=>b.onclick=()=>setFilter('profile',b.dataset.v));
     $('chip').style.setProperty('--c',c);$('chip').innerHTML=`<i class="dot"></i><span class="n">${f1(G?G.wt:s.pct)}<small>%</small></span><span class="l"><b>${filter.k?esc(filter.v):'כל היישובים'}</b><span>הצביעו · ${esc(s.time)}</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>`}
 };
-$('q').oninput=()=>{render.shown=0;render.list()};$('sort').onchange=()=>render.list();
+$('q').oninput=()=>{render.shown=0;render.list();render.sugg()};$('q').onfocus=()=>render.sugg();$('q').addEventListener('blur',()=>setTimeout(()=>{$('qSugg').hidden=true},180));$('q').addEventListener('keydown',e=>{if(e.key==='Enter'){const b=$('qSugg').querySelector('button');if(b){b.click();e.preventDefault()}}if(e.key==='Escape'){$('q').value='';render.list();$('qSugg').hidden=true}});$('sort').onchange=()=>render.list();
+$('sortSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('sort').value=b.dataset.v;$('sortSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));render.shown=0;render.list()});
 $('chip').onclick=()=>sheet.filterPick();$('cityView').onclick=()=>sheet.filterPick();
 $('citybar').querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{city.setLayout(b.dataset.l);render.chip()});
 
@@ -1120,9 +1168,9 @@ function draggable(el,key){let sx,sy,ox,oy,moved;const saved=(()=>{try{return JS
 /* ===== ticker: news flashes that change with the screen ===== */
 const ticker={paused:false,
   init(){$('tkPause').onclick=()=>{this.paused=!this.paused;$('ticker').classList.toggle('paused',this.paused);$('tkPause').setAttribute('aria-pressed',this.paused);$('tkPause').setAttribute('aria-label',this.paused?'הפעלת המבזקים':'עצירת המבזקים')};const vp=$('ticker').querySelector('.tk-viewport');vp.addEventListener('pointerdown',()=>$('ticker').classList.add('hold'));['pointerup','pointercancel','pointerleave'].forEach(ev=>vp.addEventListener(ev,()=>$('ticker').classList.remove('hold')));this.render()},
-  items(){const s=snaps[cur],p=snaps[cur-1];const scr=loc.name?'loc':reports.id?'rep':nav.cur;const out=[];const rf=ref2022(s.time);const mov=r=>`${r.name} ${f1(r.pct)}% הצביעו`;
+  items(force){const s=snaps[cur],p=snaps[cur-1];const scr=force||(loc.name?'loc':reports.id?'rep':nav.cur);const out=[];const rf=ref2022(s.time);const mov=r=>`${r.name} ${f1(r.pct)}% הצביעו`;
     const P=groups('profile');const top=[...P].sort((a,b)=>b.wt-a.wt);const big=rows.filter(r=>r.elig>=50000);
-    const push=(t,go,c,tag)=>out.push({t:(tag?`<em>${tag}</em>`:'')+t,go,c});const S=groups('sector'),Ty=groups('type');const nxt=autoRefresh.next();
+    const push=(t,go,c,tag)=>out.push({t:(tag?`<em>${tag}</em>`:'')+t,go,c,tag,raw:t});const S=groups('sector'),Ty=groups('type');const nxt=autoRefresh.next();
     if(nxt)push(`רענון אוטומטי בעוד <b>${nxt}</b> דק׳ · עד 01:00`,null,'var(--p-none)','חי');
     if(scr==='loc'&&loc.name){const r=byName.get(loc.name);const G=P.find(g=>g.name===r.profile);push(`<b>${esc(r.name)}</b> ${f1(r.pct)}% הצביעו · ${signed(r.pct-s.pct)} נק׳ מול הארצי`,null,colorOf('profile',r.profile));if(r.delta!=null)push(`מאז ${p.time}: <b>${signed(r.delta)}</b> נק׳ ביישוב, ${signed(s.pct-p.pct)} בארצי`);if(G)push(`הפרופיל "${esc(r.profile)}" כולו: <b>${f1(G.wt)}%</b> הצביעו`,()=>setFilter('profile',r.profile,true),colorOf('profile',r.profile));if(r.t22!=null)push(`ב-2022 הצביעו כאן בסוף היום <b>${f1(r.t22)}%</b> · הושגו ${r.pace}%`);const nb=rows.filter(x=>x.profile===r.profile&&x.elig>=Math.max(2000,r.elig/3)&&x.name!==r.name).sort((a,b)=>Math.abs(a.pct-r.pct)-Math.abs(b.pct-r.pct)).slice(0,2);nb.forEach(x=>push(`דומה: ${mov(x)}`,()=>loc.open(x.name)))}
     else if(scr==='city'||scr==='rep'||scr==='home'){push(`ארצי <b>${f1(s.pct)}%</b> הצביעו · ${fmt(s.voters)} מצביעים · נכון ל-${esc(s.time)}`,()=>nav.tab('home'));
@@ -1159,6 +1207,25 @@ const install={ev:null,ios:/iphone|ipad|ipod/i.test(navigator.userAgent)&&!windo
   show(){const b=$('btnInstall');b.hidden=false;b.classList.add('gold');b.onclick=()=>this.go()},
   async go(){if(this.ev){this.ev.prompt();const r=await this.ev.userChoice.catch(()=>null);if(r&&r.outcome==='accepted'){$('btnInstall').hidden=true}this.ev=null;return}
     sheet.open(`<button class="ibtn close" data-close aria-label="סגירה">✕</button><h2>להתקין כאפליקציה</h2><p>באייפון: לוחצים על כפתור <b>שיתוף</b> (הריבוע עם החץ למעלה) בתחתית ספארי, ואז <b>"הוסף למסך הבית"</b>. האפליקציה נפתחת במסך מלא, בלי סרגל כתובת.</p><p>באנדרואיד ובמחשב: בכרום, תפריט ⋮ ואז <b>"התקן אפליקציה"</b> או <b>"הוסף למסך הבית"</b>.</p>`);$('sheet').querySelector('[data-close]').onclick=()=>sheet.close()}};
+/* ===== the briefing: everything the ticker says, in large type ===== */
+const brief={on:false,timer:null,idx:0,list:[],
+  open(){if(this.on)return;this.on=true;nav.push('brief');$('brief').hidden=false;this.render();clearInterval(this.timer);this.timer=setInterval(()=>this.next(),6500)},
+  close(fromPop){if(!this.on)return;if(!fromPop&&nav.top()==='brief'){history.back();return}this.on=false;clearInterval(this.timer);$('brief').hidden=true},
+  cards(){return ticker.items('home').filter(x=>x.raw&&x.tag!=='חי').map(x=>{const all=[...x.raw.matchAll(/<b>(.*?)<\/b>(\s*(?:נק׳|מצביעים|יישובים))?/g)];const m=all.find(a=>/\d/.test(a[1]))||all[0];let big=null,rest=x.raw;if(m){big=m[1]+(m[2]?'<small>'+m[2]+'</small>':'');rest=x.raw.replace(m[0],'').replace(/\(\s*\)/g,'').replace(/^[\s·:]+|[\s·:]+$/g,'').replace(/\s*:\s*·/g,' ·').replace(/\s·\s·\s/g,' · ')}return{...x,big,rest}})},
+  render(){const s=snaps[cur],p=snaps[cur-1];const r=ref2022(s.time);const d=s.pct-r.v;this.list=this.cards();
+    const order=[['ארצי',x=>!x.tag||x.tag==='חי'],['מי מול מי',x=>x.tag==='מי מול מי'],['לפי פרופיל',x=>x.tag==='פרופיל'],['מגזרים וסוגי יישוב',x=>x.tag==='מגזר'||x.tag==='סוג'],['ערים גדולות',x=>x.tag==='עיר'],['2022 ואחר',x=>x.tag==='2022'||x.tag==='אחר']];
+    let n=0;const secs=order.map(([title,fn])=>{const items=this.list.filter(fn);if(!items.length)return'';return`<div class="bf-sec">${esc(title)}<small>${items.length} מבזקים</small></div><div class="bf-grid">${items.map(c=>{const i=this.list.indexOf(c);return`<button class="bf-card${c.go?'':' static'}" data-i="${i}" style="--c:${c.c||'var(--gold)'};animation-delay:${Math.min(n++,16)*35}ms">${c.tag?`<em>${esc(c.tag)}</em>`:''}${c.big?`<span class="big">${c.big}</span>`:''}<span class="txt">${c.rest}</span></button>`}).join('')}</div>`}).join('');
+    $('brief').innerHTML=`<div class="bf-top"><h2>מבזקים חיים <small>נכון ל-${esc(s.time)} · ${this.list.length} מבזקים</small></h2><span class="live"><i></i>חי</span><button class="ibtn" id="bfClose" aria-label="סגירה">✕</button></div>
+      <div class="bf-wrap"><div class="bf-hero in" id="bfHero"></div><div class="bf-dots" id="bfDots"></div>
+      <div class="bf-22"><div style="--c:var(--flag)"><b>${f1(s.pct)}%</b><small>היום · ${esc(s.time)}</small>${p?`<span class="d ${s.pct-p.pct>=0?'up':'down'}">${signed(s.pct-p.pct)} מאז ${esc(p.time)}</span>`:''}</div><div style="--c:var(--gold)"><b>${f1(r.v)}%${r.exact?'':'<small style="display:inline;color:var(--gold)">~</small>'}</b><small>2022 באותה שעה</small><span class="d ${d>=0?'up':'down'}">${signed(d)} נק׳ היום</span></div><div style="--c:var(--gold)"><b>${REF.final}%</b><small>2022 סופי</small><span class="d ${s.pct>=REF.final?'up':'down'}">${signed(s.pct-REF.final)} נק׳ היום</span></div></div>
+      ${secs}</div>`;
+    $('bfClose').onclick=()=>this.close();$('brief').querySelectorAll('.bf-card').forEach(b=>b.onclick=()=>{const c=this.list[+b.dataset.i];if(!c||!c.go)return;this.close();setTimeout(c.go,260)});
+    this.idx=0;this.head()},
+  heads(){return this.list.filter(x=>x.big&&x.tag!=='חי'&&x.tag!=='אחר')},
+  head(){const H=this.heads();if(!H.length)return;const c=H[this.idx%H.length];const el=$('bfHero');el.classList.remove('in');void el.offsetWidth;el.classList.add('in');el.style.setProperty('--c',c.c||'var(--gold)');el.innerHTML=`<span class="tag">${esc(c.tag||'ארצי')}</span><div class="big">${c.big}</div><div class="txt">${c.rest}</div>`;$('bfDots').innerHTML=H.slice(0,12).map((_,i)=>`<i class="${i===this.idx%Math.min(H.length,12)?'on':''}"></i>`).join('')},
+  next(){this.idx++;this.head()}};
+/* numbers count up to their new value */
+function countUp(el,to,from){if(!el)return;if(reduce||from==null||Math.abs(to-from)<.05){el.textContent=f1(to);return}const t0=performance.now();const step=()=>{const t=clamp((performance.now()-t0)/900,0,1);const e=1-Math.pow(1-t,3);el.textContent=f1(lerp(from,to,e));if(t<1)requestAnimationFrame(step)};step()}
 /* ===== resizable panel (desktop): drag the divider between the panel and the 3D ===== */
 const splitter={min:340,key:'kai-panel',
   init(){const el=$('splitter'),app=$('app');if(!el)return;let saved=0;try{saved=+localStorage.getItem(this.key)||0}catch(_){}if(saved)this.set(saved,false);
@@ -1172,7 +1239,7 @@ const splitter={min:340,key:'kai-panel',
   save(){try{localStorage.setItem(this.key,this.cur())}catch(_){}}};
 /* ===== boot ===== */
 window.KAI={city,loc,sheet,nav,snaps,ask,reports,get rows(){return rows},get filter(){return filter},setFilter,show};
-theme.init();nav.init();install.init();derive(snaps.length-1);cur=snaps.length-1;ask.init();render.groups();city.init();show(snaps.length-1);ticker.init();autoRefresh.init();draggable($('chip'),'chip');draggable($('pick'),'pick');splitter.init();
+theme.init();nav.init();install.init();derive(snaps.length-1);cur=snaps.length-1;ask.init();render.groups();city.init();show(snaps.length-1);ticker.init();autoRefresh.init();draggable($('chip'),'chip');draggable($('pick'),'pick');splitter.init();$('tkOpen').onclick=()=>brief.open();$('btnBrief').onclick=()=>brief.open();
 (async()=>{if(!window.claude||!claude.use)return;
   try{sampleFn=await claude.use('sample')}catch(_){}
   try{userRef=await claude.use('user')}catch(_){}
