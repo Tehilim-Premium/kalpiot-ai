@@ -8,3 +8,6 @@ qa/shots/
 .env
 data/raw-geo/countries-10m.json
 qa/video/
+qa/promo/
+qa/promo.mp4
+qa/promo-strip.jpg
