@@ -1,6 +1,7 @@
 // Inlines the data files into src/page.html and writes:
 //   dist/artifact.html  — the page as the claude.ai Artifact tool expects it (no document skeleton)
-//   dist/index.html     — a standalone page (for GitHub / Netlify / local screenshots)
+//   dist/index.html     — a standalone page (local screenshots)
+//   docs/               — the installable web app for GitHub Pages (index.html + manifest + service worker + icons)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,7 +24,15 @@ const standalone = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0038B8">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230038B8'/%3E%3Cpath d='M32 12 L49 42 L15 42 Z M32 52 L15 22 L49 22 Z' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+<meta name="application-name" content="קלפיות AI">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="קלפיות AI">
+<meta name="description" content="עיר תלת-ממדית של אחוזי ההצבעה לכנסת ה-26 לפי יישוב, בהשוואה ל-2022">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -32,4 +41,12 @@ ${page}
 </html>
 `;
 fs.writeFileSync(path.join(root, 'dist/index.html'), standalone);
+// installable app for GitHub Pages
+const docs = path.join(root, 'docs'); fs.mkdirSync(path.join(docs, 'icons'), { recursive: true });
+const stamp = data.built.replace(/[^0-9]/g, '');
+fs.writeFileSync(path.join(docs, 'index.html'), standalone.replace('</body>', `<script>if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
+</body>`));
+for (const f of ['manifest.webmanifest', 'sw.js']) fs.writeFileSync(path.join(docs, f), rd('public/' + f).replace('__BUILD__', stamp));
+for (const f of fs.readdirSync(path.join(root, 'public/icons'))) fs.copyFileSync(path.join(root, 'public/icons', f), path.join(docs, 'icons', f));
+fs.writeFileSync(path.join(docs, '.nojekyll'), '');
 console.log('built', Math.round(page.length / 1024) + 'KB', 'localities', Object.keys(data.cls).length, 'snapshots', data.snaps.map(s => s.time).join(', '));
