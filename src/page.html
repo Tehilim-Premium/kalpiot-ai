@@ -306,6 +306,38 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .btn svg{width:17px;height:17px}
 .btn:disabled{opacity:.5;transform:none}
 
+/* ===== reports ===== */
+.repgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.repgrid button{display:grid;gap:3px;padding:11px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);text-align:start;transition:all .2s}
+.repgrid button:hover{border-color:var(--line-strong);transform:translateY(-1px)}
+.repgrid button b{font-size:14px;font-weight:700}
+.repgrid button small{font-size:11px;color:var(--mute);line-height:1.3}
+.rep-h{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.rep-h h2{font-size:26px}
+.rep-h .small{line-height:1.4}
+.rt{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+.rt th{text-align:start;font-weight:500;color:var(--mute);padding:6px 4px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:11.5px}
+.rt td{padding:7px 4px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+.rt td.n{font-weight:700;white-space:normal;min-width:120px;line-height:1.25}
+.rt td.n .small{font-weight:400;font-size:11px}
+.rt td.v{font-weight:900;font-size:14px}
+.rt td .d{font-size:11px;font-weight:700}
+.rt .up{color:var(--up)}.rt .down{color:var(--down)}
+.rt .bar{display:inline-block;width:52px;height:6px;border-radius:3px;background:var(--s2);vertical-align:middle;margin-inline-start:6px;position:relative;overflow:hidden}
+.rt .bar i{position:absolute;inset:0 0 0 auto;width:var(--w);background:var(--c);border-radius:3px}
+.rt tr[data-n]{cursor:pointer}
+.rt tr[data-n]:hover td{background:var(--s2)}
+.rtwrap{overflow-x:auto;margin:0 -4px}
+.ins{display:grid;gap:8px}
+.ins div{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:13.5px;line-height:1.5}
+.ins div b.k{font-size:20px;font-weight:900;line-height:1.1;color:var(--c,var(--flag));white-space:nowrap}
+.ins div b.k small{display:block;font-size:10.5px;font-weight:500;color:var(--mute)}
+.tline{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:6px;margin:6px 0 2px}
+.tline div{padding:8px 6px;border-radius:10px;background:var(--bg);border:1px solid var(--line);text-align:center}
+.tline b{display:block;font-size:18px;font-weight:900}
+.tline small{font-size:11px;color:var(--mute)}
+@media print{.top,.tabbar,.stage,.btns,.lnav{display:none!important}.layer{position:static;overflow:visible}body,html{overflow:visible;height:auto}}
+
 /* ===== sheets ===== */
 .veil{position:fixed;inset:0;z-index:30;background:rgba(3,8,30,.5);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .veil.on{display:flex}
@@ -381,6 +413,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
         <div class="shead"><h2 id="homeTitle">ארצי</h2><button class="ibtn" data-info="home" aria-label="מה מאומת ומה הערכה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></button></div>
         <div class="hero" id="hero"></div>
         <div class="timeline" id="timeline"></div>
+        <div class="card"><h3>דוחות בלחיצה <span class="small">מהנתונים שבדף</span></h3><div class="repgrid" id="repGrid"></div></div>
         <div class="card"><h3>לפי פרופיל הצבעה <span class="small">מהתוצאה ביישוב ב-2022</span></h3><div class="prof" id="profRows"></div></div>
       </section>
 
@@ -409,6 +442,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
       </section>
 
       <section class="layer" id="loc" aria-label="כרטיס יישוב"></section>
+      <section class="layer" id="rep" aria-label="דוח"></section>
     </div>
   </div>
   <section class="stage" id="stage" aria-label="עיר תלת-ממדית של היישובים">
@@ -445,7 +479,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isMobile=()=>innerWidth<900;
 const tok=name=>getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const colorKey=(k,v)=>k==='profile'?(PCOL[v]||'--p-none'):k==='sector'?(SECCOL[v]||'--p-none'):(TYPECOL[v]||'--p-none');
-const colorOf=(k,v)=>`var(${colorKey(k,v)})`;
+const colorOf=(k,v)=>k==='lean'?`var(${LEANCOL[v]||'--p-none'})`:`var(${colorKey(k,v)})`;
 const hexOf=(k,v)=>tok(colorKey(k,v))||'#8C94AD';
 const toast=t=>{const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>e.classList.remove('on'),2400)};
 const signed=(n,d=1)=>(n>=0?'+':'−')+f1(Math.abs(n));
@@ -466,8 +500,13 @@ let dbRef=null,sampleFn=null,userRef=null;
 function derive(i){const s=snaps[i],p=snaps[i-1];prevMap=p?new Map(p.rows.map(r=>[r[1],r[2]])):null;
   rows=s.rows.map(r=>{const c=CLS[r[1]]||{s:'לא מסווג',t:'כפר / יישוב',p:'ללא נתון',b:0,v:null,co:null,op:null,ar:null,ot:null,est:1};const pv=prevMap?prevMap.get(r[1]):undefined;
     const elig=c.b?Math.round(c.b*SCALE):0;
-    return{rank:r[0],name:r[1],pct:r[2],updated:r[3],sector:c.s,type:c.t,profile:c.p||'ללא נתון',b22:c.b,t22:c.v,co:c.co,op:c.op,ar:c.ar,ot:c.ot,est:c.est,elig,votes:Math.round(elig*r[2]/100),pace:c.v?Math.round(100*r[2]/c.v):null,prev:pv,delta:pv==null?null:r[2]-pv}});
+    return{rank:r[0],name:r[1],pct:r[2],updated:r[3],sector:c.s,type:c.t,profile:c.p||'ללא נתון',lean:leanOf(c),b22:c.b,t22:c.v,co:c.co,op:c.op,ar:c.ar,ot:c.ot,est:c.est,elig,votes:Math.round(elig*r[2]/100),pace:c.v?Math.round(100*r[2]/c.v):null,prev:pv,delta:pv==null?null:r[2]-pv}});
   byName=new Map(rows.map(r=>[r.name,r]))}
+const leanOf=c=>c.co==null?'אין נתון':c.co>=60?'קואליציה':c.op>=60?'אופוזיציה':c.ar>=60?'מפלגות ערביות':'מעורב';
+const LEANCOL={'קואליציה':'--p-right','מעורב':'--p-rz','אופוזיציה':'--p-center','מפלגות ערביות':'--p-arab','אין נתון':'--p-none'};
+/* groups for any snapshot (pure: does not touch the current view) */
+function groupsAt(i,key){const s=snaps[i];const m={};let tot=0,totV=0;for(const r of s.rows){const c=CLS[r[1]];if(!c||!c.b||r[2]<3)continue;const e=Math.round(c.b*SCALE),v=e*r[2]/100;const k=key==='profile'?(c.p||'ללא נתון'):key==='sector'?c.s:key==='type'?c.t:leanOf(c);const g=(m[k]=m[k]||{e:0,v:0,n:0,a:[]});g.e+=e;g.v+=v;g.n++;g.a.push(r[2]);tot+=e;totV+=v}
+  const out={};for(const k in m)out[k]={name:k,wt:100*m[k].v/m[k].e,share:100*m[k].e/tot,n:m[k].n,contrib:100*m[k].v/s.eligible,votes:m[k].v,med:median(m[k].a)};return{groups:out,explained:totV,tot}}
 const valid=()=>rows.filter(r=>r.pct>=3);
 const matches=r=>!filter.k||r[filter.k]===filter.v;
 function groups(key){const v=valid().filter(r=>r.elig>0),tot=v.reduce((a,r)=>a+r.elig,0),totV=v.reduce((a,r)=>a+r.votes,0);const m={};
@@ -487,13 +526,14 @@ const nav={stack:[],cur:'home',
     document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('on',x.dataset.s===s));
     $('stage').classList.toggle('on',s==='city');
     if(loc.name){$('loc').classList.remove('on');loc.name=null;if(this.top()==='loc')this.stack.pop()}
+    if(reports.id){$('rep').classList.remove('on');reports.id=null;if(this.top()==='rep')this.stack.pop()}
     if(s==='city')setTimeout(()=>city.resize(),50);if(s==='ask')setTimeout(()=>{if(!isMobile())$('askIn').focus({preventScroll:true})},300)},
   back(){history.back()},
   init(){addEventListener('popstate',()=>{const k=this.stack.pop();
-    if(k==='loc')loc.close(true);else if(k==='sheet')sheet.close(true);else if(k==='full')city.full(false,true);else if(k&&k.startsWith('tab:'))this.tab(k.slice(4),true);
+    if(k==='loc')loc.close(true);else if(k==='rep')reports.close(true);else if(k==='sheet')sheet.close(true);else if(k==='full')city.full(false,true);else if(k&&k.startsWith('tab:'))this.tab(k.slice(4),true);
     else{this.tab('home',true);this.push('root')}});
     this.push('root');
-    addEventListener('keydown',e=>{if(e.key==='Escape'){if($('veil').classList.contains('on'))sheet.close();else if($('stage').classList.contains('full'))city.full(false);else if(loc.name)loc.close()}})}};
+    addEventListener('keydown',e=>{if(e.key==='Escape'){if($('veil').classList.contains('on'))sheet.close();else if($('stage').classList.contains('full'))city.full(false);else if(reports.id)reports.close();else if(loc.name)loc.close()}})}};
 document.querySelectorAll('#tabs [role=tab]').forEach(b=>b.onclick=()=>nav.tab(b.dataset.s));
 document.querySelectorAll('[data-info]').forEach(b=>b.onclick=()=>sheet.info(b.dataset.info));
 
@@ -534,7 +574,7 @@ const render={
       <div class="row"><span>2022 באותה שעה: <b>${f1(r.v)}%</b>${r.exact?'':' <span class="est">~</span>'}</span><span class="d ${d>=0?'up':'down'}">${signed(d)} נק׳ ${d>=0?'מעל':'מתחת ל'}-2022</span></div>`;
     $('timeline').innerHTML=snaps.map((x,i)=>`<button aria-pressed="${i===cur}" data-i="${i}"><b>${f1(x.pct)}%</b><span>${esc(x.time)}</span></button>`).join('')+`<button class="add" id="addSnap" aria-label="הוספת נקודת זמן">+</button>`;
     $('timeline').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>show(+b.dataset.i));$('addSnap').onclick=()=>sheet.update();
-    this.prof()},
+    this.prof();reports.grid()},
   prof(){const G=groups('profile');const nat=snaps[cur].pct;const max=Math.max(70,...G.map(g=>g.wt))+4;
     $('profRows').innerHTML=G.map(g=>`<button class="prow ${filter.k==='profile'&&filter.v===g.name?'on':filter.k?'dim':''}" data-v="${esc(g.name)}" style="--c:${colorOf('profile',g.name)};--w:${g.wt/max*100}%;--n:${nat/max*100}%"><i></i><span class="t"><b>${esc(g.name)}</b><small>${f1(g.share)}% מהבוחרים · ${g.n} יישובים</small><span class="bar"><i></i><em></em></span></span><span class="v"><b>${f1(g.wt)}%</b><small>הצביעו</small></span></button>`).join('');
     $('profRows').querySelectorAll('.prow').forEach(b=>b.onclick=()=>setFilter('profile',b.dataset.v,true))},
@@ -577,9 +617,9 @@ const loc={name:null,
       <div class="card"><h3>השוואה <span class="small">הצביעו</span></h3><div class="cmp">${cmp.map(([l,p,cc])=>`<div><span>${esc(l)}</span><span class="t"><i style="--c:${cc};--w:${clamp(p,0,100)}%"></i></span><b>${f1(p)}%</b></div>`).join('')}</div></div>
       ${r.co!=null?`<div class="card"><h3>חלוקת הקולות ב-2022 <span class="small">${esc(r.profile)}</span></h3><div class="blocs"><i style="--c:var(--p-right);--w:${r.co}%" title="קואליציה"></i><i style="--c:var(--p-center);--w:${r.op}%" title="אופוזיציה"></i><i style="--c:var(--p-arab);--w:${r.ar}%" title="מפלגות ערביות"></i><i class="other" style="--w:${r.ot||0}%" title="אחר"></i></div><div class="keys"><span><i style="--c:var(--p-right)"></i>קואליציה ${f1(r.co)}%</span><span><i style="--c:var(--p-center)"></i>אופוזיציה ${f1(r.op)}%</span><span><i style="--c:var(--p-arab)"></i>מפלגות ערביות ${f1(r.ar)}%</span><span><i class="other"></i>אחר ${f1(r.ot||0)}%</span></div></div>`:`<div class="card"><span class="small">אין נתוני 2022 ליישוב הזה בקובץ הרשמי.</span></div>`}
       ${trend.length>1?`<div class="card"><h3>במהלך היום</h3><div class="trend">${trend.map(t=>`<span><b>${f1(t.p)}%</b>${esc(t.t)}</span>`).join('')}</div></div>`:''}
-      <div class="btns"><button class="btn" id="locCity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 21V9l5-3v15M8 21V12l5-3v12M13 21V5l5-2v18"/></svg>הצג בעיר</button><button class="btn q" id="locAsk">שאל על ${esc(r.name)}</button><button class="btn q" id="locShare">שתף</button></div>`;
+      <div class="btns"><button class="btn" id="locCity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 21V9l5-3v15M8 21V12l5-3v12M13 21V5l5-2v18"/></svg>הצג בעיר</button><button class="btn gold" id="locRep">דוח יישוב</button><button class="btn q" id="locAsk">שאל על ${esc(r.name)}</button><button class="btn q" id="locShare">שתף</button></div>`;
     $('loc').classList.add('on');$('loc').scrollTop=0;
-    $('locBack').onclick=()=>this.close();$('loc').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>this.open(b.dataset.go));
+    $('locBack').onclick=()=>this.close();$('locRep').onclick=()=>reports.open('locality',name);$('loc').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>this.open(b.dataset.go));
     $('locCity').onclick=()=>{city.focus(name);if(isMobile()){this.close();nav.tab('city')}};
     $('locAsk').onclick=()=>{this.close();nav.tab('ask');ask.send(`ספר לי על ${name}: איפה הוא עומד מול הארצי, מול הפרופיל שלו ומול 2022?`)};
     $('locShare').onclick=()=>share(`${r.name}: ${f1(r.pct)}% מהבוחרים הצביעו נכון ל-${s.time} (ארצי ${f1(s.pct)}%, סופי 2022 ${r.t22!=null?f1(r.t22)+'%':'—'}).`);
@@ -781,6 +821,58 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:.7,pol:1.0,rad:48,t
       if(this.mouseMoved&&!isMobile()&&!down){this.mouseMoved=false;this.pick(this.mx,this.my,false)}
     }catch(err){if(!this._err){this._err=1;console.warn('city',err)}}};tick()}};
 
+/* ===== reports: one click, built from the numbers in the page ===== */
+const reports={id:null,arg:null,txt:'',
+  list:[['day','סיכום היום','ארצי, מול 2022, מי מוביל ומי מפגר'],['profile','לפי פרופיל הצבעה','ששת הפרופילים לאורך היום'],['sector','לפי מגזר','יהודי, ערבי, מעורב, בדואי, דרוזי'],['lean','לפי גוש 2022','קואליציה, אופוזיציה, ערבי, מעורב'],['cities','הערים הגדולות','כל עיר מעל 50 אלף בוחרים'],['edges','קצוות ומגמות','הגבוהים, הנמוכים והמזנקים']],
+  grid(){$('repGrid').innerHTML=this.list.map(([id,t,s])=>`<button data-r="${id}"><b>${t}</b><small>${s}</small></button>`).join('');$('repGrid').querySelectorAll('button').forEach(b=>b.onclick=()=>this.open(b.dataset.r))},
+  sgn:(n,d=1)=>(n>=0?'+':'−')+f1(Math.abs(n)),
+  dcls:n=>n>=0?'up':'down',
+  bar:(k,v,p,max=80)=>`<span class="bar" style="--c:${colorOf(k,v)};--w:${clamp(p/max*100,0,100)}%"><i></i></span>`,
+  tline(vals,labels){return`<div class="tline" style="--n:${vals.length}">${vals.map((v,i)=>`<div><b>${v==null?'—':f1(v)+'%'}</b><small>${esc(labels[i])}</small></div>`).join('')}</div>`},
+  groupTable(key,order){const L=snaps.length,last=L-1;const G=snaps.map((_,i)=>groupsAt(i,key).groups);const names=order?order.filter(n=>G[last][n]):Object.keys(G[last]).sort((a,b)=>G[last][b].share-G[last][a].share);const nat=snaps[last].pct;
+    const head=`<tr><th>קבוצה</th><th>מהבוחרים</th>${snaps.map(s=>`<th>${esc(s.time)}</th>`).join('')}${L>1?'<th>שינוי</th>':''}<th>מול ארצי</th><th>תרומה</th></tr>`;
+    const body=names.map(n=>{const g=G[last][n];const p=L>1&&G[last-1][n]?g.wt-G[last-1][n].wt:null;const dn=g.wt-nat;return`<tr><td class="n">${esc(n)}<br><span class="small">${g.n} יישובים</span></td><td>${f1(g.share)}%</td>${G.map((gg,i)=>`<td class="${i===last?'v':''}">${gg[n]?f1(gg[n].wt)+'%':'—'}${i===last?this.bar(key,n,g.wt):''}</td>`).join('')}${L>1?`<td class="${this.dcls(p||0)}"><span class="d">${p==null?'—':this.sgn(p)+' נק׳'}</span></td>`:''}<td class="${this.dcls(dn)}"><span class="d">${this.sgn(dn)}</span></td><td>${f1(g.contrib)} נק׳</td></tr>`}).join('');
+    const txt=names.map(n=>{const g=G[last][n];return`${n}: ${f1(g.wt)}% הצביעו (${f1(g.share)}% מהבוחרים, ${g.n} יישובים)${L>1&&G[last-1][n]?', '+this.sgn(g.wt-G[last-1][n].wt)+' מאז '+snaps[last-1].time:''}, ${this.sgn(g.wt-nat)} מול ארצי, תרומה ${f1(g.contrib)} נק׳`}).join('\n');
+    return{html:`<div class="rtwrap"><table class="rt">${head}${body}</table></div>`,txt,G,names}},
+  insightsFor(key,order){const{G,names}=this.groupTable(key,order);const last=snaps.length-1,nat=snaps[last].pct;const g=G[last];const sorted=[...names].sort((a,b)=>g[b].wt-g[a].wt);const hi=sorted[0],lo=sorted[sorted.length-1];const big=[...names].sort((a,b)=>g[b].share-g[a].share)[0];const out=[];
+    out.push({k:f1(g[hi].wt)+'%',s:'הצביעו',c:colorOf(key,hi),t:`<b>${esc(hi)}</b> מובילים, ${this.sgn(g[hi].wt-nat)} נק׳ מעל הארצי (${f1(nat)}%).`});
+    out.push({k:f1(g[lo].wt)+'%',s:'הצביעו',c:colorOf(key,lo),t:`<b>${esc(lo)}</b> בתחתית, ${f1(Math.abs(g[lo].wt-nat))} נק׳ מתחת לארצי.`});
+    out.push({k:f1(g[big].contrib),s:'נק׳ לארצי',c:colorOf(key,big),t:`<b>${esc(big)}</b> הם הקבוצה הגדולה (${f1(g[big].share)}% מהבוחרים) ותורמים הכי הרבה נקודות לאחוז הארצי.`});
+    if(snaps.length>1){const p=G[last-1];const mv=[...names].filter(n=>p[n]).sort((a,b)=>(g[b].wt-p[b].wt)-(g[a].wt-p[a].wt))[0];if(mv)out.push({k:this.sgn(g[mv].wt-p[mv].wt),s:'נק׳ מאז '+snaps[last-1].time,c:colorOf(key,mv),t:`<b>${esc(mv)}</b> זינקו הכי הרבה מאז העדכון הקודם.`})}
+    return out},
+  ins(list){return`<div class="ins">${list.map(x=>`<div style="--c:${x.c||'var(--flag)'}"><b class="k">${x.k}<small>${esc(x.s||'')}</small></b><span>${x.t}</span></div>`).join('')}</div>`},
+  insTxt(list){return list.map(x=>`• ${x.k} ${x.s||''}: ${x.t.replace(/<[^>]+>/g,'')}`).join('\n')},
+  localRows(i){const s=snaps[i];return s.rows.map(r=>{const c=CLS[r[1]];return c?{name:r[1],pct:r[2],elig:c.b?Math.round(c.b*SCALE):0,p:c.p||'ללא נתון',s:c.s,t22:c.v}:null}).filter(Boolean)},
+  open(id,arg){const r=this.build(id,arg);if(!r)return;if(!this.id)nav.push('rep');this.id=id;this.arg=arg;const s=snaps[snaps.length-1];
+    $('rep').innerHTML=`<div class="lnav"><button class="back" id="repBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>חזרה</button><span class="sp"></span><button class="ibtn" data-info="rep" aria-label="מה מאומת ומה הערכה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></button></div>
+      <div class="rep-h"><h2>${esc(r.title)}</h2><span class="small">נכון ל-${esc(s.time)} · ${snaps.map(x=>x.time).join(' ← ')} · ${fmt(s.voters)} הצביעו</span></div>${r.html}
+      <div class="btns"><button class="btn" id="repCopy">העתק כטקסט</button><button class="btn q" id="repShare">שתף</button><button class="btn q" id="repAsk">שאל על הדוח</button>${window.claude?'':'<button class="btn q" id="repPrint">הדפס / PDF</button>'}</div>`;
+    this.txt=`קלפיות AI — ${r.title} (נכון ל-${s.time}, ${snaps.map(x=>x.time).join(' ← ')})\n${r.txt}\n\nמאומת: אחוזי הצבעה (ועדת הבחירות), 2022 (קובץ רשמי). הערכה: בוחרים = 2022 × ${SCALE}, סיווג פרופיל/מגזר, 2022 באותה שעה.`;
+    $('rep').classList.add('on');$('rep').scrollTop=0;$('repBack').onclick=()=>this.close();$('rep').querySelector('[data-info]').onclick=()=>sheet.info('home');
+    $('repCopy').onclick=async()=>{try{await navigator.clipboard.writeText(this.txt);toast('הדוח הועתק כטקסט')}catch(_){toast('לא ניתן להעתיק כאן')}};
+    $('repShare').onclick=()=>share(this.txt.slice(0,900));
+    $('repAsk').onclick=()=>{this.close();nav.tab('ask');ask.send(`נתח את הדוח "${r.title}" ב-4 משפטים: מה הכי בולט ומה מפתיע?`)};
+    if($('repPrint'))$('repPrint').onclick=()=>{try{window.print()}catch(_){}};
+    $('rep').querySelectorAll('tr[data-n]').forEach(tr=>tr.onclick=()=>{this.close();loc.open(tr.dataset.n)})},
+  close(fromPop){if(!this.id)return;if(!fromPop&&nav.top()==='rep'){history.back();return}$('rep').classList.remove('on');this.id=null},
+  build(id,arg){const L=snaps.length,last=L-1,s=snaps[last],p=snaps[last-1];const rf=ref2022(s.time);
+    if(id==='day'){const P=this.groupTable('profile',[...PROFILES]);const ins=[{k:f1(s.pct)+'%',s:'הצביעו',t:`<b>${fmt(s.voters)}</b> מתוך ${fmt(s.eligible)} בעלי זכות, נכון ל-${esc(s.time)}.`},{k:this.sgn(s.pct-rf.v),s:'נק׳ מול 2022',c:s.pct>=rf.v?'var(--up)':'var(--down)',t:`ב-2022 באותה שעה הצביעו <b>${f1(rf.v)}%</b>${rf.exact?'':' (הערכה בין שעות)'}; הסופי של 2022 היה ${REF.final}%.`},...(p?[{k:this.sgn(s.pct-p.pct),s:'נק׳ מאז '+p.time,t:`<b>${fmt(s.voters-p.voters)}</b> מצביעים נוספו ב-${Math.round((toMin(s.time)-toMin(p.time)))} דקות.`}]:[]),...this.insightsFor('profile',[...PROFILES]).slice(0,2)];
+      return{title:'סיכום היום',html:this.tline(snaps.map(x=>x.pct),snaps.map(x=>x.time))+`<div class="card" style="margin-top:12px"><h3>מה בולט</h3>${this.ins(ins)}</div><div class="card"><h3>לפי פרופיל הצבעה</h3>${P.html}</div>`,txt:`ארצי: ${snaps.map(x=>x.time+' '+f1(x.pct)+'%').join(' ← ')}\n${this.insTxt(ins)}\n\nלפי פרופיל:\n${P.txt}`}}
+    if(id==='profile'||id==='sector'||id==='lean'){const key=id;const order=key==='profile'?[...PROFILES]:null;const T=this.groupTable(key,order);const ins=this.insightsFor(key,order);const title=key==='profile'?'לפי פרופיל הצבעה':key==='sector'?'לפי מגזר':'לפי גוש 2022';
+      return{title,html:`<div class="card"><h3>מה בולט</h3>${this.ins(ins)}</div><div class="card"><h3>הטבלה המלאה <span class="small">הצביעו · לכל נקודת זמן</span></h3>${T.html}</div>`,txt:`${this.insTxt(ins)}\n\n${T.txt}`}}
+    if(id==='cities'){const cur_=this.localRows(last).filter(r=>r.elig>=50000).sort((a,b)=>b.pct-a.pct);const prevs=snaps.map((_,i)=>new Map(this.localRows(i).map(r=>[r.name,r.pct])));
+      const rowsH=cur_.map(r=>`<tr data-n="${esc(r.name)}"><td class="n">${esc(r.name)}<br><span class="small">${esc(r.p)} · ${fmt(r.elig)} בוחרים~</span></td>${snaps.map((_,i)=>`<td class="${i===last?'v':''}">${prevs[i].has(r.name)?f1(prevs[i].get(r.name))+'%':'—'}${i===last?this.bar('profile',r.p,r.pct):''}</td>`).join('')}<td class="${this.dcls(r.pct-s.pct)}"><span class="d">${this.sgn(r.pct-s.pct)}</span></td><td>${r.t22!=null?f1(r.t22)+'%':'—'}</td></tr>`).join('');
+      const hi=cur_[0],lo=cur_[cur_.length-1];const above=cur_.filter(r=>r.pct>=s.pct).length;const ins=[{k:f1(hi.pct)+'%',s:'הצביעו',c:colorOf('profile',hi.p),t:`<b>${esc(hi.name)}</b> מובילה בין הערים הגדולות.`},{k:f1(lo.pct)+'%',s:'הצביעו',c:colorOf('profile',lo.p),t:`<b>${esc(lo.name)}</b> אחרונה, ${f1(s.pct-lo.pct)} נק׳ מתחת לארצי.`},{k:String(above),s:'מתוך '+cur_.length,t:`ערים גדולות מעל הארצי (${f1(s.pct)}%). השאר מתחת.`}];
+      return{title:'הערים הגדולות',html:`<div class="card"><h3>מה בולט</h3>${this.ins(ins)}</div><div class="card"><h3>${cur_.length} ערים מעל 50 אלף בוחרים <span class="small">לחיצה פותחת כרטיס</span></h3><div class="rtwrap"><table class="rt"><tr><th>עיר</th>${snaps.map(x=>`<th>${esc(x.time)}</th>`).join('')}<th>מול ארצי</th><th>2022 סופי</th></tr>${rowsH}</table></div></div>`,txt:`${this.insTxt(ins)}\n\n${cur_.map(r=>`${r.name}: ${f1(r.pct)}% הצביעו (${this.sgn(r.pct-s.pct)} מול ארצי, סופי 2022 ${r.t22!=null?f1(r.t22)+'%':'—'})`).join('\n')}`}}
+    if(id==='edges'){const all=this.localRows(last).filter(r=>r.elig>=2000&&r.pct>=3);const top=[...all].sort((a,b)=>b.pct-a.pct).slice(0,10),bot=[...all].sort((a,b)=>a.pct-b.pct).slice(0,10);const pm=p?new Map(this.localRows(last-1).map(r=>[r.name,r.pct])):null;const ris=pm?[...all].filter(r=>pm.has(r.name)&&r.elig>=5000).map(r=>({...r,d:r.pct-pm.get(r.name)})).sort((a,b)=>b.d-a.d).slice(0,8):[];
+      const tbl=(list,extra)=>`<div class="rtwrap"><table class="rt">${list.map(r=>`<tr data-n="${esc(r.name)}"><td class="n">${esc(r.name)}<br><span class="small">${esc(r.p)} · ${fmt(r.elig)} בוחרים~</span></td><td class="v">${f1(r.pct)}%${this.bar('profile',r.p,r.pct,100)}</td>${extra?extra(r):''}</tr>`).join('')}</table></div>`;
+      return{title:'קצוות ומגמות',html:`<div class="card"><h3>10 הגבוהים <span class="small">מעל 2,000 בוחרים</span></h3>${tbl(top)}</div><div class="card"><h3>10 הנמוכים</h3>${tbl(bot)}</div>${ris.length?`<div class="card"><h3>המזנקים מאז ${esc(p.time)} <span class="small">מעל 5,000 בוחרים</span></h3>${tbl(ris,r=>`<td class="up"><span class="d">${this.sgn(r.d)} נק׳</span></td>`)}</div>`:''}`,txt:`הגבוהים:\n${top.map(r=>`${r.name} ${f1(r.pct)}%`).join('\n')}\n\nהנמוכים:\n${bot.map(r=>`${r.name} ${f1(r.pct)}%`).join('\n')}${ris.length?`\n\nהמזנקים מאז ${p.time}:\n${ris.map(r=>`${r.name} ${this.sgn(r.d)} נק׳ (${f1(r.pct)}%)`).join('\n')}`:''}`}}
+    if(id==='locality'){const r=byName.get(arg);if(!r)return null;const hist=snaps.map(sn=>{const x=sn.rows.find(z=>z[1]===arg);return x?x[2]:null});const G=groupsAt(last,'profile').groups[r.profile],S=groupsAt(last,'sector').groups[r.sector];const v=valid();const pctl=Math.round(100*v.filter(x=>x.pct<r.pct).length/Math.max(1,v.length));
+      const ins=[{k:f1(r.pct)+'%',s:'הצביעו',c:colorOf('profile',r.profile),t:`<b>${esc(arg)}</b>: ${this.sgn(r.pct-s.pct)} נק׳ מול הארצי, גבוה מ-${pctl}% מהיישובים.`},...(G?[{k:this.sgn(r.pct-G.wt),s:'מול '+r.profile,c:colorOf('profile',r.profile),t:`הפרופיל "${esc(r.profile)}" כולו הצביע ${f1(G.wt)}%.`}]:[]),...(S?[{k:this.sgn(r.pct-S.wt),s:'מול '+r.sector,t:`המגזר "${esc(r.sector)}" כולו הצביע ${f1(S.wt)}%.`}]:[]),...(r.t22!=null?[{k:r.pace+'%',s:'מהסופי 2022',c:'var(--gold)',t:`ב-2022 הצביעו כאן בסופו של יום <b>${f1(r.t22)}%</b>.`}]:[]),...(r.delta!=null?[{k:this.sgn(r.delta),s:'נק׳ מאז '+p.time,t:`הארצי עלה באותו זמן ב-${f1(s.pct-p.pct)} נק׳.`}]:[])];
+      return{title:'דוח יישוב: '+arg,html:this.tline(hist,snaps.map(x=>x.time))+`<div class="card" style="margin-top:12px"><h3>מה בולט</h3>${this.ins(ins)}</div>`,txt:`${arg}: ${snaps.map((x,i)=>x.time+' '+(hist[i]==null?'—':f1(hist[i])+'%')).join(' ← ')}\n${this.insTxt(ins)}`}}
+    return null}};
+const toMin=t=>{const[h,m]=t.split(':').map(Number);return h*60+m};
+
 /* ===== install as an app ===== */
 const install={ev:null,ios:/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream,standalone:matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,
   init(){if(this.standalone)return;addEventListener('beforeinstallprompt',e=>{e.preventDefault();this.ev=e;this.show()});if(this.ios&&location.protocol==='https:'&&!/claude/.test(location.host))this.show();
@@ -789,7 +881,7 @@ const install={ev:null,ios:/iphone|ipad|ipod/i.test(navigator.userAgent)&&!windo
   async go(){if(this.ev){this.ev.prompt();const r=await this.ev.userChoice.catch(()=>null);if(r&&r.outcome==='accepted'){$('btnInstall').hidden=true}this.ev=null;return}
     sheet.open(`<button class="ibtn close" data-close aria-label="סגירה">✕</button><h2>להתקין כאפליקציה</h2><p>באייפון: לוחצים על כפתור <b>שיתוף</b> (הריבוע עם החץ למעלה) בתחתית ספארי, ואז <b>"הוסף למסך הבית"</b>. האפליקציה נפתחת במסך מלא, בלי סרגל כתובת.</p><p>באנדרואיד ובמחשב: בכרום, תפריט ⋮ ואז <b>"התקן אפליקציה"</b> או <b>"הוסף למסך הבית"</b>.</p>`);$('sheet').querySelector('[data-close]').onclick=()=>sheet.close()}};
 /* ===== boot ===== */
-window.KAI={city,loc,sheet,nav,snaps,ask,get rows(){return rows},get filter(){return filter},setFilter,show};
+window.KAI={city,loc,sheet,nav,snaps,ask,reports,get rows(){return rows},get filter(){return filter},setFilter,show};
 theme.init();nav.init();install.init();derive(snaps.length-1);cur=snaps.length-1;ask.init();render.groups();city.init();show(snaps.length-1);
 (async()=>{if(!window.claude||!claude.use)return;
   try{sampleFn=await claude.use('sample')}catch(_){}

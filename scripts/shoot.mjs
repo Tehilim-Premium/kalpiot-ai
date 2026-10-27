@@ -41,6 +41,9 @@ async function run(device, theme) {
   await page.click('#tabs [data-s="ask"]'); await page.waitForTimeout(500); await snap('ask');
   await page.click('#tabs [data-s="home"]'); await page.click('[data-info="home"]'); await page.waitForTimeout(500); await snap('info');
   await page.evaluate(() => window.KAI.sheet.close());
+  await page.evaluate(() => window.KAI.reports.open('day')); await page.waitForTimeout(500); await snap('report-day');
+  await page.evaluate(() => { window.KAI.reports.close(true); window.KAI.reports.open('cities'); }); await page.waitForTimeout(500); await snap('report-cities');
+  await page.evaluate(() => window.KAI.reports.close(true));
   // overflow check: body never scrolls sideways
   const ovf = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
   if (ovf) errors.push(`${device}/${theme}: horizontal overflow`);
