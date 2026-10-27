@@ -122,6 +122,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
 .citybar button{height:34px;padding:0 12px;border-radius:10px;font-size:13px;font-weight:700;color:var(--mute);display:inline-flex;align-items:center;gap:6px;transition:all .2s}
 .citybar button svg{width:16px;height:16px}
 .citybar button[aria-pressed="true"]{background:var(--flag);color:#fff}
+.citybar #btnNorth{color:var(--gold)}
 .citybar #cityView{color:var(--ink2);border-inline-start:1px solid var(--line);border-radius:0 10px 10px 0;margin-inline-start:2px}
 .legend{position:absolute;inset-inline:max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2;display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
 .legend button{display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;border-radius:999px;background:var(--s1);border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--ink2);box-shadow:var(--d2);transition:all .2s}
@@ -566,7 +567,7 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px so
     <div class="tipx" id="tipx"></div>
     <button class="chip" id="chip" aria-label="סינון העיר"></button>
     <button class="fsb" id="btnFull" aria-label="מסך מלא" title="מסך מלא: גרירה, הטיה וצביטה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>מסך מלא</span></button>
-    <div class="citybar" id="citybar" role="group" aria-label="פריסת העיר"><button data-l="ring" aria-pressed="true">מעגל לפי פרופיל</button><button data-l="map" aria-pressed="false">מפת ישראל</button><button id="cityView" aria-label="הגדרות תצוגה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h6"/></svg>תצוגה</button></div>
+    <div class="citybar" id="citybar" role="group" aria-label="פריסת העיר"><button data-l="ring" aria-pressed="false">מעגל לפי פרופיל</button><button data-l="map" aria-pressed="true">מפת ישראל</button><button id="btnNorth" hidden aria-label="יישור המפה: צפון למעלה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 5l3 7-3 7-3-7z"/></svg>צפון</button><button id="cityView" aria-label="הגדרות תצוגה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h6"/></svg>תצוגה</button></div>
     <div class="legend" id="legend" aria-label="מקרא צבעים"></div>
     <div class="pick-card" id="pick"></div>
   </section>
@@ -832,9 +833,9 @@ const MAP=(()=>{const xs=[],ys=[];(GEO.outline||[]).forEach(r=>r.forEach(p=>{xs.
   const x0=Math.min(...xs,-90),x1=Math.max(...xs,90),y0=Math.min(...ys,-250),y1=Math.max(...ys,250);const S=46/(y1-y0);const padX=70,padY=30;
   return{S,x0,x1,y0,y1,W:(x1-x0+padX*2)*S,Hh:(y1-y0+padY*2)*S,LW:(x1-x0+16)*S,LH:(y1-y0+16)*S,cx:((x0+x1)/2)*S,cz:-((y0+y1)/2)*S,toX:km=>km*S,toZ:km=>-km*S}})();
 const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,rad:48,tx:0,ty:2,tz:0,taz:Math.PI/2,tpol:.8,trad:48,ttx:0,tty:2,ttz:0,vel:0,velP:0,lastUser:0,sel:-1,hover:-1,labels:[],wlabels:[],mode:'profile',intro:true,introT0:0,
-  layoutMode:(()=>{try{return localStorage.getItem('kai-layout')||'ring'}catch(_){return 'ring'}})(),
+  layoutMode:(()=>{try{return localStorage.getItem('kai-layout2')||'map'}catch(_){return 'ring'}})(),
   density:(()=>{try{return +localStorage.getItem('kai-density')||2}catch(_){return 2}})(),
-  setLayout(m){if(m===this.layoutMode)return;this.layoutMode=m;try{localStorage.setItem('kai-layout',m)}catch(_){}this.layoutKey='';this.userZoomed=false;this.ttx=m==='map'?MAP.cx:0;this.ttz=m==='map'?MAP.cz:0;this.taz=m==='map'?Math.PI/2:.7;this.tpol=m==='map'?.8:1.0;this.resize();this.build();toast(m==='map'?'מפת ארץ ישראל':'מעגל לפי פרופיל')},
+  setLayout(m){if(m===this.layoutMode)return;this.layoutMode=m;try{localStorage.setItem('kai-layout2',m)}catch(_){}this.layoutKey='';this.userZoomed=false;this.ttx=m==='map'?MAP.cx:0;this.ttz=m==='map'?MAP.cz:0;this.taz=m==='map'?Math.PI/2:.7;this.tpol=m==='map'?.8:1.0;this.resize();this.build();toast(m==='map'?'מפת ארץ ישראל':'מעגל לפי פרופיל')},
   setDensity(d){this.density=d;try{localStorage.setItem('kai-density',d)}catch(_){}this.towerLabels()},
   panK(){const st=$('stage');const h=st.clientHeight||600;return 2*this.rad*Math.tan(20*Math.PI/180)/h*Math.max(.7,Math.sin(this.pol))},
   bounds(){return this.layoutMode==='map'?{x0:MAP.cx-MAP.LW/2,x1:MAP.cx+MAP.LW/2,z0:MAP.cz-MAP.LH/2,z1:MAP.cz+MAP.LH/2}:{x0:-20,x1:20,z0:-20,z1:20}},
@@ -862,7 +863,7 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,ra
     this.mapDisc=new THREE.Mesh(new THREE.PlaneGeometry(MAP.LW,MAP.LH),new THREE.MeshBasicMaterial({color:0x7fa7ff,transparent:true,opacity:.07,side:THREE.DoubleSide,depthWrite:false}));this.mapDisc.rotation.x=-Math.PI/2;this.mapDisc.position.set(MAP.cx,0,MAP.cz);this.sc.add(this.mapDisc);
     this.mapRing22=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(MAP.LW,MAP.LH)),new THREE.LineBasicMaterial({color:0xd9b54a,transparent:true,opacity:.8}));this.mapRing22.rotation.x=-Math.PI/2;this.mapRing22.position.set(MAP.cx,0,MAP.cz);this.sc.add(this.mapRing22);
     /* one-time gesture hint on the 3D, until the first touch */
-    this.hint=document.createElement('div');this.hint.className='gest';this.hint.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v6M12 10V4a1.5 1.5 0 0 1 3 0v7M15 11V6a1.5 1.5 0 0 1 3 0v8a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.6L4 13.5a1.5 1.5 0 0 1 2.4-1.8L9 14"/></svg><div><b>אפשר לשחק בתלת-ממד</b><span>אצבע אחת מזיזה את המפה · צביטה מקרבת · שתי אצבעות מסובבות ומטות · נגיעה על מגדל פותחת כרטיס · נגיעה כפולה מאפסת</span></div><button data-ok>הבנתי</button>';
+    this.hint=document.createElement('div');this.hint.className='gest';this.hint.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v6M12 10V4a1.5 1.5 0 0 1 3 0v7M15 11V6a1.5 1.5 0 0 1 3 0v8a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.6L4 13.5a1.5 1.5 0 0 1 2.4-1.8L9 14"/></svg><div><b>אפשר לשחק בתלת-ממד</b><span>'+(this.layoutMode==='map'?'אצבע אחת מזיזה את המפה · צביטה מקרבת · פיתול בשתי אצבעות מסובב · "צפון" מיישר':'אצבע אחת מסובבת · צביטה מקרבת · שתי אצבעות מזיזות')+' · נגיעה על מגדל פותחת כרטיס · נגיעה כפולה מאפסת</span></div><button data-ok>הבנתי</button>';
     let seen=false;try{seen=localStorage.getItem('kai-gest')==='1'}catch(_){}if(!seen){st.appendChild(this.hint);this.hint.querySelector('[data-ok]').onclick=()=>this.hideHint();cv.addEventListener('pointerdown',()=>this.hideHint(),{once:true})}
     const disc=c=>{const m=new THREE.Mesh(new THREE.CircleGeometry(19.4,96),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.1,side:THREE.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;this.sc.add(m);return m};
     this.disc=disc(0x7fa7ff);this.discRing=new THREE.Mesh(new THREE.RingGeometry(19.4,19.62,96),new THREE.MeshBasicMaterial({color:0x7fa7ff,transparent:true,opacity:.8,side:THREE.DoubleSide,depthWrite:false}));this.discRing.rotation.x=-Math.PI/2;this.sc.add(this.discRing);
@@ -939,19 +940,33 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,ra
   input(){const cv=$('gl');let down=false,moved=false,sx=0,sy=0,saz=0,spol=0,lx=0,ly=0,lt=0,pts=new Map(),pinch0=0,rad0=0,pan0=null,lastTap=0;
     const user=()=>{this.lastUser=performance.now();this.flight=null};
     let stx=0,stz=0,ang0=0,az0=0,pol0=0,mid0=null;
-    cv.addEventListener('pointerdown',e=>{user();this.vel=0;this.velP=0;this.pvx=0;this.pvz=0;cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);
-      if(pts.size===1){down=true;moved=false;sx=lx=e.clientX;sy=ly=e.clientY;saz=this.taz;spol=this.tpol;stx=this.ttx;stz=this.ttz;lt=performance.now();cv.classList.add('grab')}
-      else if(pts.size===2){const a=[...pts.values()];pinch0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);rad0=this.trad;ang0=Math.atan2(a[1][1]-a[0][1],a[1][0]-a[0][0]);az0=this.taz;pol0=this.tpol;mid0=[(a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2];pan0=[mid0[0],mid0[1],this.ttx,this.ttz]}});
+    const anchor=(x,y)=>{down=true;sx=lx=x;sy=ly=y;saz=this.taz;spol=this.tpol;stx=this.ttx;stz=this.ttz;lt=performance.now()};let g2=null;
+    const panBy=(bx,bz,dx,dy,k)=>{const az=this.az;const rx=Math.sin(az),rz=-Math.cos(az),fx=-Math.cos(az),fz=-Math.sin(az);const B=this.bounds();this.ttx=clamp(bx-dx*k*rx+dy*k*fx,B.x0,B.x1);this.ttz=clamp(bz-dx*k*rz+dy*k*fz,B.z0,B.z1);return [rx,rz,fx,fz]};
+    cv.addEventListener('pointerdown',e=>{user();this.vel=0;this.velP=0;this.pvx=0;this.pvz=0;try{cv.setPointerCapture(e.pointerId)}catch(_){}pts.set(e.pointerId,[e.clientX,e.clientY]);
+      if(pts.size===1){anchor(e.clientX,e.clientY);moved=false;cv.classList.add('grab')}
+      else if(pts.size===2){const a=[...pts.values()];pinch0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);rad0=this.trad;ang0=Math.atan2(a[1][1]-a[0][1],a[1][0]-a[0][0]);az0=this.taz;pol0=this.tpol;mid0=[(a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2];pan0=[mid0[0],mid0[1],this.ttx,this.ttz];g2={rot:0,rotAt:0,tilt:0,tiltAt:0}}});
     cv.addEventListener('pointermove',e=>{this.mx=e.clientX;this.my=e.clientY;this.mouseMoved=true;if(pts.has(e.pointerId))pts.set(e.pointerId,[e.clientX,e.clientY]);
-      if(pts.size===2){const a=[...pts.values()];const d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);this.trad=clamp(rad0*Math.pow(pinch0/d,.8),this.minRad(),this.maxRad());this.userZoomed=true;const cx=(a[0][0]+a[1][0])/2,cy=(a[0][1]+a[1][1])/2;moved=true;user();
-        if(this.layoutMode==='map'){/* two fingers: twist rotates, vertical move tilts */const ang=Math.atan2(a[1][1]-a[0][1],a[1][0]-a[0][0]);let da=ang-ang0;if(da>Math.PI)da-=2*Math.PI;if(da<-Math.PI)da+=2*Math.PI;this.taz=az0+da;this.tpol=clamp(pol0+(cy-mid0[1])*.004,.25,1.45);return}
+      if(pts.size===2&&g2){const a=[...pts.values()];const d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);const cx=(a[0][0]+a[1][0])/2,cy=(a[0][1]+a[1][1])/2;moved=true;user();
+        if(this.layoutMode==='map'){/* real fingers never move cleanly: a pinch always carries a little twist and drift, so rotation and tilt engage only past a threshold and continue from where they engaged; the midpoint pans so the map stays under the fingers */
+          const ang=Math.atan2(a[1][1]-a[0][1],a[1][0]-a[0][0]);let da=ang-ang0;if(da>Math.PI)da-=2*Math.PI;if(da<-Math.PI)da+=2*Math.PI;const mdx=cx-mid0[0],mdy=cy-mid0[1];const zr=Math.abs(Math.log(d/pinch0));
+          if(!g2.rot&&Math.abs(da)>.32){g2.rot=1;g2.rotAt=da}
+          if(!g2.tilt&&!g2.rot&&Math.abs(mdy)>30&&Math.abs(mdy)>Math.abs(mdx)*1.5&&zr<.1){g2.tilt=1;g2.tiltAt=mdy}
+          if(!g2.tilt){this.trad=clamp(rad0*Math.pow(pinch0/d,.8),this.minRad(),this.maxRad());this.userZoomed=true;panBy(pan0[2],pan0[3],mdx,mdy,this.panK())}
+          if(g2.rot)this.taz=az0+da-g2.rotAt;
+          if(g2.tilt)this.tpol=clamp(pol0+(mdy-g2.tiltAt)*.004,.25,1.45);
+          return}
+        this.trad=clamp(rad0*Math.pow(pinch0/d,.8),this.minRad(),this.maxRad());this.userZoomed=true;
         const k=this.trad*.0012;const dx=(cx-pan0[0])*k,dy=(cy-pan0[1])*k;const ca=Math.cos(this.az),sa=Math.sin(this.az);const B=this.bounds();this.ttx=clamp(pan0[2]+(-dx*sa+dy*ca)*-1,B.x0,B.x1);this.ttz=clamp(pan0[3]+(dx*ca+dy*sa)*-1,B.z0,B.z1);return}
       if(!down)return;const now=performance.now();const dt=Math.max(1,now-lt);const ddx=e.clientX-lx,ddy=e.clientY-ly;lx=e.clientX;ly=e.clientY;lt=now;
       const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>4)moved=true;if(moved)user();
-      if(this.layoutMode==='map'&&!(e.pointerType==='mouse'&&(e.buttons&2||e.shiftKey))){/* one finger on the map: the map follows the finger */const k=this.panK();const az=this.az;const rx=Math.sin(az),rz=-Math.cos(az),fx=-Math.cos(az),fz=-Math.sin(az);const B=this.bounds();this.ttx=clamp(stx-dx*k*rx+dy*k*fx,B.x0,B.x1);this.ttz=clamp(stz-dx*k*rz+dy*k*fz,B.z0,B.z1);this.pvx=clamp((-ddx*k*rx+ddy*k*fx)/dt,-.4,.4);this.pvz=clamp((-ddx*k*rz+ddy*k*fz)/dt,-.4,.4);this.vel=0;return}
+      if(this.layoutMode==='map'&&!(e.pointerType==='mouse'&&(e.buttons&2||e.shiftKey))){/* one finger on the map: the map follows the finger */const k=this.panK();const [rx,rz,fx,fz]=panBy(stx,stz,dx,dy,k);this.pvx=clamp((-ddx*k*rx+ddy*k*fx)/dt,-.4,.4);this.pvz=clamp((-ddx*k*rz+ddy*k*fz)/dt,-.4,.4);this.vel=0;return}
       this.vel=clamp((e.clientX-lx+ddx)/dt*-.06,-.05,.05);this.velP=0;this.taz=saz-dx*.0045;this.tpol=clamp(spol+dy*.0045,.25,1.45)});
-    const up=e=>{pts.delete(e.pointerId);if(pts.size<2){pinch0=0;pan0=null}if(pts.size===0){down=false;cv.classList.remove('grab');if(!moved){const now=performance.now();if(now-lastTap<320){this.reset();lastTap=0}else{lastTap=now;this.pick(e.clientX,e.clientY,true)}}else if(performance.now()-lt>60){this.vel=0;this.velP=0;this.pvx=0;this.pvz=0}}};
+    const up=e=>{pts.delete(e.pointerId);if(pts.size<2){pinch0=0;pan0=null;g2=null}
+      if(pts.size===1){/* one finger lifted after a pinch: re-anchor on the finger that stays, no jump */const p=[...pts.values()][0];anchor(p[0],p[1]);moved=true;this.pvx=0;this.pvz=0;this.vel=0;return}
+      if(pts.size===0){down=false;cv.classList.remove('grab');if(!moved){const now=performance.now();if(now-lastTap<320){this.reset();lastTap=0}else{lastTap=now;this.pick(e.clientX,e.clientY,true)}}else if(performance.now()-lt>60){this.vel=0;this.velP=0;this.pvx=0;this.pvz=0}}};
     cv.addEventListener('contextmenu',e=>e.preventDefault());cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('pointerleave',()=>{this.hover=-1;$('tipx').classList.remove('on');cv.classList.remove('pick')});
+    /* Safari: never let the page scroll or zoom under the 3D */['touchstart','touchmove','gesturestart','gesturechange'].forEach(ev=>cv.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+    $('btnNorth').onclick=()=>{user();this.taz=Math.PI/2;this.tpol=.8;this.vel=0};
     cv.addEventListener('wheel',e=>{e.preventDefault();this.trad=clamp(this.trad*(1+Math.sign(e.deltaY)*.07),this.minRad(),this.maxRad());this.userZoomed=true;user()},{passive:false});
     $('btnFull').onclick=()=>this.full(!$('stage').classList.contains('full'));
     addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;const map=this.layoutMode==='map';const pan=(dx,dz)=>{const B=this.bounds();this.ttx=clamp(this.ttx+dx,B.x0,B.x1);this.ttz=clamp(this.ttz+dz,B.z0,B.z1)};const m={ArrowLeft:()=>map?pan(-2,0):this.taz-=.12,ArrowRight:()=>map?pan(2,0):this.taz+=.12,ArrowUp:()=>map?pan(0,-2):this.tpol=clamp(this.tpol-.08,.25,1.45),ArrowDown:()=>map?pan(0,2):this.tpol=clamp(this.tpol+.08,.25,1.45),'+':()=>this.trad=clamp(this.trad*.88,this.minRad(),this.maxRad()),'-':()=>this.trad=clamp(this.trad*1.12,this.minRad(),this.maxRad())}[e.key];if(m){m();this.userZoomed=true;user()}})},
@@ -987,9 +1002,10 @@ const city={ok:false,n:0,items:[],idx:new Map(),wedges:[],az:Math.PI/2,pol:.8,ra
         if(!down&&now-this.lastUser>9000&&this.sel<0&&this.layoutMode!=='map')this.taz+=.0007*dt;
         {const B=this.bounds();this.ttx=clamp(this.ttx,B.x0,B.x1);this.ttz=clamp(this.ttz,B.z0,B.z1);this.trad=clamp(this.trad,this.minRad(),this.maxRad());this.tpol=clamp(this.tpol,.25,1.45)}
         const k=K(down?.35:.1,dt);this.az+=(this.taz-this.az)*k;this.pol+=(this.tpol-this.pol)*k;this.rad+=(this.trad-this.rad)*K(.1,dt)}
-      const k2=K(.08,dt);this.tx+=(this.ttx-this.tx)*k2;this.ty+=(this.tty-this.ty)*k2;this.tz+=(this.ttz-this.tz)*k2;
+      const k2=K(down?.45:.08,dt);this.tx+=(this.ttx-this.tx)*k2;this.ty+=(this.tty-this.ty)*k2;this.tz+=(this.ttz-this.tz)*k2;
       this.cam.position.set(this.tx+this.rad*Math.sin(this.pol)*Math.cos(this.az),this.ty+this.rad*Math.cos(this.pol),this.tz+this.rad*Math.sin(this.pol)*Math.sin(this.az));this.cam.lookAt(this.tx,this.ty,this.tz);
       this.pBlue.position.set(Math.cos(now/4000)*24,16,Math.sin(now/4000)*24);this.r.render(this.sc,this.cam);
+      {const turned=this.layoutMode==='map'&&(Math.abs(this.taz-Math.PI/2)>.04||Math.abs(this.tpol-.8)>.06);const b=$('btnNorth');if(b.hidden===turned)b.hidden=!turned}
       /* projected labels: nothing is hidden for lack of room; a label that would overlap is pushed down and gets a leader line, and everything stays inside the viewport */
       const placed=[];const W=st.clientWidth,Hh=st.clientHeight;const lines=[];const top=isMobile()?70:60;
       const fit=(s,w,h)=>{let x=clamp(s[0],w/2+6,W-w/2-6),y=clamp(s[1],top+h,Hh-16);for(let k=0;k<14;k++){const c=placed.find(p=>Math.abs(p[0]-x)<(p[2]+w)/2+4&&Math.abs(p[1]-y)<(p[3]+h)/2+2);if(!c)break;const side=(k%2?-1:1)*(s[0]>=c[0]?1:-1);const nx=c[0]+side*((c[2]+w)/2+8);if(k<2&&nx>w/2+6&&nx<W-w/2-6&&!placed.some(p=>Math.abs(p[0]-nx)<(p[2]+w)/2+4&&Math.abs(p[1]-y)<(p[3]+h)/2+2)){x=nx;continue}y=c[1]+(c[3]+h)/2+4;if(y>Hh-16){y=Hh-16;x=clamp(c[0]+side*((c[2]+w)/2+8),w/2+6,W-w/2-6)}}placed.push([x,y,w,h]);return[x,y]};
@@ -1132,7 +1148,7 @@ const ticker={paused:false,
   render(){const items=this.items();if(!items.length){$('ticker').hidden=true;return}$('ticker').hidden=false;const html=items.map((x,i)=>`<button data-i="${i}" style="--c:${x.c||'var(--gold)'}"><i></i>${x.t}</button>`).join('');$('tkTrack').innerHTML=html+html;
     $('tkTrack').querySelectorAll('button').forEach(b=>b.onclick=()=>{const it=items[+b.dataset.i];if(it.go)it.go()});requestAnimationFrame(()=>{const w=$('tkTrack').scrollWidth/2;$('tkTrack').style.setProperty('--dur',Math.max(20,Math.round(w/55))+'s')})}};
 /* ===== auto refresh: every 15 minutes until 01:00 (Israel), picks up newly published data ===== */
-const autoRefresh={until:new Date('2026-10-28T01:00:00+02:00').getTime(),every:15*60*1000,t0:Date.now(),
+const autoRefresh={until:new Date('2026-10-28T12:00:00+02:00').getTime(),every:15*60*1000,t0:Date.now(),
   next(){const now=Date.now();if(now>this.until)return null;return Math.max(1,Math.ceil((this.t0+this.every-now)/60000))},
   init(){if(window.claude)return;setInterval(()=>{const now=Date.now();if(now>this.until)return;if(now-this.t0>=this.every&&document.visibilityState==='visible'&&!ask.busy){toast('מרענן נתונים…');setTimeout(()=>location.reload(),600)}},30000)}};
 
