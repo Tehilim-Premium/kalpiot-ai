@@ -10,7 +10,7 @@ const rd = f => fs.readFileSync(path.join(root, f), 'utf8');
 
 const data = {
   cls: JSON.parse(rd('data/cls.json')),
-  snaps: [JSON.parse(rd('data/snap-1249.json')), JSON.parse(rd('data/snap-1645.json'))],
+  snaps: fs.readdirSync(path.join(root, 'data')).filter(f => /^snap-\d{4}\.json$/.test(f)).sort().map(f => JSON.parse(rd('data/' + f))),
   ref2022: JSON.parse(rd('data/ref-2022.json')),
   scale: 1.08,
   built: new Date().toISOString().slice(0, 16).replace('T', ' ')
