@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'qa/shots'); fs.mkdirSync(out, { recursive: true });
-const url = pathToFileURL(path.join(root, 'dist/index.html')).href;
+const url = pathToFileURL(path.join(root, 'docs/index.html')).href;
 const GPU = ['--use-angle=d3d11', '--ignore-gpu-blocklist', '--enable-gpu'];
 let browser = await chromium.launch({ channel: 'chrome', headless: true, args: GPU }).catch(() => chromium.launch({ headless: true, args: GPU }));
 const errors = [];
