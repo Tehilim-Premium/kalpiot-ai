@@ -48,3 +48,9 @@
   מניפסט + אייקונים + service worker (עובד אופליין) + כפתור "התקן" זהב בסרגל העליון (אנדרואיד/כרום: התקנה בלחיצה; אייפון: הדרכה "שיתוף → הוסף למסך הבית").
 - "שאל את העיר": בקלוד דרך sample; באתר המותקן דרך Claude API ישירות (claude-opus-5-5, effort low, streaming) עם מפתח API שנשמר רק בדפדפן (qa/ask-check.mjs מאמת: 401 עם מפתח מזויף = הבקשה מגיעה ותקינה).
 - לנטליפיי + פונקציית שרת (כדי שמי שאין לו מפתח יוכל לשאול) — עדיין ממתין לטוקן ומפתח מרובי.
+
+7. נטליפיי (סבב ג)
+- האתר הציבורי להתקנה, בלי שם תהילים: https://kalpiot-ai.netlify.app (צוות rmproductions2026, אתר kalpiot-ai).
+- "שאל את העיר" עובד שם לכולם בלי מפתח: netlify/functions/ask.mts מעביר ל-Claude דרך Netlify AI Gateway (המפתח מוזרק אוטומטית לשרת). נבדק: תשובה אמיתית ב-5.6 שניות מתוך הדף בטלפון מדומה.
+- פריסה: `npx netlify deploy --prod --dir docs --functions netlify/functions` מתוך התיקייה; הטוקן ומזהה האתר ב-.env (לא בגיט).
+- GitHub Pages נשאר כגיבוי: https://tehilim-premium.github.io/kalpiot-ai/

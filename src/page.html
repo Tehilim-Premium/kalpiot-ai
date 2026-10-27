@@ -587,7 +587,7 @@ const loc={name:null,
   close(fromPop){if(!this.name)return;if(!fromPop&&nav.top()==='loc'){history.back();return}$('loc').classList.remove('on');this.name=null}};
 
 /* ===== share ===== */
-async function share(text){const t=`קלפיות AI — ${text}`;const url=ART_URL.startsWith('http')?ART_URL:location.href;try{await navigator.clipboard.writeText(t+' '+url);toast('הועתק ללוח')}catch(_){toast(t)}}
+async function share(text){const t=`קלפיות AI — ${text}`;const url=(window.claude&&ART_URL.startsWith('http'))?ART_URL:location.href.split('#')[0];try{await navigator.clipboard.writeText(t+' '+url);toast('הועתק ללוח')}catch(_){toast(t)}}
 $('btnShare').onclick=()=>{const s=snaps[cur];share(`${f1(s.pct)}% מהבוחרים הצביעו נכון ל-${s.time}, ${fmt(s.voters)} מצביעים. ב-2022 באותה שעה: ${f1(ref2022(s.time).v)}%.`)};
 
 /* ===== ask the city ===== */
