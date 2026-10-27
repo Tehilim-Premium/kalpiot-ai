@@ -6,3 +6,4 @@ qa/shots/
 # Local Netlify folder
 .netlify
 .env
+data/raw-geo/countries-10m.json
